@@ -1,0 +1,2448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARK DESTROYER</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E8232A;
+    --orange: #FF6B1A;
+    --yellow: #FFD000;
+    --blue: #3B82F6;
+    --blue-dark: #1E40AF;
+    --green: #22C55E;
+    --green-dark: #15803D;
+    --fire: #FF6B1A;
+    --fire-dark: #C2410C;
+    --purple: #A855F7;
+    --purple-dark: #6B21A8;
+    --teal: #14B8A6;
+    --teal-dark: #0F766E;
+    --dark: #0D0D0D;
+    --mid: #1A1A1A;
+    --light: #2A2A2A;
+    --text: #F0EDE4;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 80px 0;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(-55deg, transparent, transparent 60px, rgba(255,255,255,0.012) 60px, rgba(255,255,255,0.012) 61px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HOMEPAGE ── */
+  #homepage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  .home-hero {
+    background: var(--red);
+    padding: 48px 24px 60px;
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .home-hero::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -20px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .home-hero-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .home-hero h1 {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(44px, 12vw, 80px);
+    line-height: 0.88;
+    color: white;
+    text-shadow: 5px 5px 0 rgba(0,0,0,0.25);
+  }
+
+  .home-hero h1 span { color: var(--yellow); }
+
+  .home-hero-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 12px;
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+
+  .home-grid {
+    padding: 24px 14px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .workout-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--mid);
+    border-radius: 8px;
+    padding: 16px 18px;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+    transition: all 0.18s;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .workout-card:active { transform: scale(0.98); }
+
+  .workout-card.card-am    { border-left-color: var(--red); }
+  .workout-card.card-pm    { border-left-color: var(--blue); }
+  .workout-card.card-bw    { border-left-color: var(--green); }
+  .workout-card.card-daily { border-left-color: var(--fire); }
+  .workout-card.card-arms  { border-left-color: var(--purple); }
+
+  .card-icon {
+    font-size: 28px;
+    min-width: 36px;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .card-body { flex: 1; }
+
+  .card-title {
+    font-family: 'Black Ops One', cursive;
+    font-size: 20px;
+    color: white;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .card-meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    line-height: 1.5;
+  }
+
+  .card-arrow {
+    font-size: 18px;
+    color: var(--muted);
+    transition: transform 0.15s, color 0.15s;
+  }
+
+  .workout-card:active .card-arrow { transform: translateX(4px); }
+
+  .card-badge {
+    position: absolute;
+    top: 10px; right: 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+
+  .badge-daily { background: rgba(255,107,26,0.15); color: var(--fire); border: 1px solid rgba(255,107,26,0.3); }
+
+  /* ── STICKY RIBBON (workout view) ── */
+  .sticky-timer {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(13,13,13,0.97);
+    backdrop-filter: blur(14px);
+    border-bottom: 2px solid var(--red);
+    padding: 7px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.3s;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.6);
+  }
+
+  .sticky-timer.session-b { border-bottom-color: var(--blue); }
+  .sticky-timer.session-c { border-bottom-color: var(--green); }
+  .sticky-timer.session-d { border-bottom-color: var(--fire); }
+  .sticky-timer.session-e { border-bottom-color: var(--purple); }
+  .sticky-timer.session-f { border-bottom-color: var(--teal); }
+
+  .home-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding: 5px 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .home-btn:hover { border-color: rgba(255,255,255,0.4); color: white; }
+
+  .timer-session-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--red);
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+  .session-b .timer-session-tag { color: #60A5FA; }
+  .session-c .timer-session-tag { color: var(--green); }
+  .session-d .timer-session-tag { color: var(--fire); }
+  .session-e .timer-session-tag { color: var(--purple); }
+  .session-f .timer-session-tag { color: var(--teal); }
+
+  #timer-display {
+    font-family: 'Black Ops One', cursive;
+    font-size: 26px;
+    color: var(--yellow);
+    letter-spacing: 2px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .timer-progress-mini {
+    flex: 1;
+    height: 3px;
+    background: var(--light);
+    border-radius: 2px;
+    overflow: hidden;
+    min-width: 30px;
+  }
+
+  #progress-bar-mini {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--orange), var(--yellow));
+    width: 0%;
+    transition: width 0.5s;
+  }
+  .session-b #progress-bar-mini { background: linear-gradient(90deg, var(--blue-dark), var(--blue)); }
+  .session-c #progress-bar-mini { background: linear-gradient(90deg, var(--green-dark), var(--green)); }
+  .session-d #progress-bar-mini { background: linear-gradient(90deg, var(--fire-dark), var(--fire)); }
+  .session-e #progress-bar-mini { background: linear-gradient(90deg, var(--purple-dark), var(--purple)); }
+  .session-f #progress-bar-mini { background: linear-gradient(90deg, var(--teal-dark), var(--teal)); }
+
+  .timer-btns { display: flex; gap: 5px; }
+
+  .timer-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 5px 11px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  #start-btn { background: var(--red); color: white; }
+  #start-btn:active { transform: scale(0.95); }
+  #reset-btn { background: var(--light); color: var(--muted); }
+  #reset-btn:hover { color: white; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: var(--red);
+    padding: 24px 20px 44px;
+    clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+    margin-top: 48px;
+    transition: background 0.3s;
+    position: relative;
+    z-index: 1;
+  }
+  .page-header.pm-header { background: #1a3a7a; }
+  .page-header.bw-header { background: #0d2d1a; }
+  .page-header.daily-header { background: #2d1400; }
+  .page-header.arms-header  { background: #1a0d2e; }
+  .page-header.gym-header   { background: #0a2420; }
+
+  .superset-block.gym-block { border-left-color: var(--teal); }
+  .superset-block.gym-block .superset-label { background: var(--teal-dark); }
+
+  .ss-connector.teal span { color: var(--teal); }
+  .ss-connector.teal .ss-connector-line { background: var(--teal); }
+
+  .notes-box.gym-notes { background: rgba(20,184,166,0.05); border: 1px solid rgba(20,184,166,0.2); }
+  .gym-notes .notes-title { color: var(--teal); }
+  .gym-notes .notes-list li::before { color: var(--teal); }
+
+  .workout-card.card-gym { border-left-color: var(--teal); }
+
+  .superset-block.arms-block { border-left-color: var(--purple); }
+  .superset-block.arms-block .superset-label { background: var(--purple-dark); }
+
+  .ss-connector.purple span { color: var(--purple); }
+  .ss-connector.purple .ss-connector-line { background: var(--purple); }
+
+  .notes-box.arms-notes { background: rgba(168,85,247,0.05); border: 1px solid rgba(168,85,247,0.2); }
+  .arms-notes .notes-title { color: var(--purple); }
+  .arms-notes .notes-list li::before { color: var(--purple); }
+
+  .pump-badge {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--purple);
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: 2px;
+    padding: 2px 6px;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ── DAILY BLITZ INTERVAL UI ── */
+  .blitz-intro {
+    background: var(--mid);
+    border: 1px solid rgba(255,107,26,0.25);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 20px;
+  }
+  .blitz-intro-title {
+    font-family: 'Black Ops One', cursive;
+    font-size: 14px;
+    color: var(--fire);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .blitz-intro-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
+
+  .interval-display {
+    background: var(--mid);
+    border-radius: 8px;
+    padding: 20px 16px;
+    margin-top: 16px;
+    text-align: center;
+    border: 1px solid rgba(255,107,26,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .interval-display::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--fire-dark), var(--fire), var(--yellow));
+  }
+
+  .interval-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--fire);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .interval-exercise-name {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(22px, 6vw, 34px);
+    color: white;
+    line-height: 1;
+    margin-bottom: 4px;
+    transition: opacity 0.2s;
+  }
+
+  .interval-exercise-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--fire);
+    margin-bottom: 16px;
+    min-height: 14px;
+  }
+
+  .interval-countdown {
+    font-family: 'Black Ops One', cursive;
+    font-size: 72px;
+    color: var(--yellow);
+    line-height: 1;
+    letter-spacing: -2px;
+    transition: color 0.3s;
+  }
+
+  .interval-countdown.danger { color: var(--red); }
+
+  .interval-type-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .interval-progress-bar {
+    height: 4px;
+    background: var(--light);
+    border-radius: 2px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+
+  #interval-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--fire-dark), var(--fire));
+    width: 100%;
+    transition: width 1s linear;
+  }
+
+  .interval-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    justify-content: center;
+  }
+
+  .interval-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+
+  #blitz-start-btn { background: var(--fire); color: white; font-size: 13px; padding: 10px 28px; }
+  #blitz-start-btn:active { transform: scale(0.97); }
+  #blitz-reset-btn { background: var(--light); color: var(--muted); }
+  #blitz-reset-btn:hover { color: white; }
+
+  .exercise-queue {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .queue-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    background: var(--mid);
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .queue-item.active-ex {
+    border-left-color: var(--fire);
+    background: rgba(255,107,26,0.1);
+  }
+
+  .queue-item.done-ex {
+    opacity: 0.35;
+    border-left-color: #2ECC71;
+  }
+
+  .queue-num {
+    font-family: 'Black Ops One', cursive;
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 22px;
+  }
+
+  .queue-item.active-ex .queue-num { color: var(--fire); }
+
+  .queue-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    text-transform: uppercase;
+    flex: 1;
+  }
+
+  .queue-duration {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .queue-item.active-ex .queue-duration { color: var(--fire); }
+
+  .superset-block.daily-block { border-left-color: var(--fire); }
+  .superset-block.daily-block .superset-label { background: var(--fire-dark); }
+  .notes-box.daily-notes { background: rgba(255,107,26,0.05); border: 1px solid rgba(255,107,26,0.2); }
+  .daily-notes .notes-title { color: var(--fire); }
+  .daily-notes .notes-list li::before { color: var(--fire); }
+  .ss-connector.fire span { color: var(--fire); }
+  .ss-connector.fire .ss-connector-line { background: var(--fire); }
+
+  .header-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .page-header h1 {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(38px, 9vw, 68px);
+    line-height: 0.9;
+    color: white;
+    text-shadow: 4px 4px 0 rgba(0,0,0,0.3);
+  }
+  .page-header h1 span { color: var(--yellow); }
+
+  .meta-bar { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .meta-pill {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.8);
+    background: rgba(0,0,0,0.25);
+    padding: 3px 9px;
+    border-radius: 2px;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    padding: 0 14px;
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .session-panel { display: none; }
+  .session-panel.active { display: block; }
+
+  /* ── PHASE ── */
+  .phase { margin-top: 24px; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .phase-num {
+    font-family: 'Black Ops One', cursive;
+    font-size: 10px;
+    color: var(--yellow);
+    letter-spacing: 3px;
+    white-space: nowrap;
+  }
+  .phase-title {
+    font-family: 'Black Ops One', cursive;
+    font-size: 20px;
+    color: white;
+  }
+  .phase-time {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* ── SUPERSET BLOCK ── */
+  .superset-block {
+    background: var(--mid);
+    border-left: 3px solid var(--red);
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 9px;
+    overflow: hidden;
+    transition: border-color 0.2s, opacity 0.2s;
+  }
+  .superset-block.pm-block { border-left-color: var(--blue); }
+  .superset-block.bw-block { border-left-color: var(--green); }
+  .superset-block.done { border-left-color: #2ECC71 !important; opacity: 0.5; }
+
+  .superset-label {
+    background: var(--red);
+    padding: 5px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .superset-block.pm-block .superset-label { background: #1e3a8a; }
+  .superset-block.bw-block .superset-label { background: #14532d; }
+  .superset-block.done .superset-label { background: #1a4a2e !important; }
+
+  .ss-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.85);
+    text-transform: uppercase;
+  }
+  .ss-check { font-size: 15px; cursor: pointer; user-select: none; }
+
+  .exercises {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .exercise-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: start;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .exercise-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .ex-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--text);
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .ex-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--orange);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+  }
+
+  .ex-sets {
+    font-family: 'Black Ops One', cursive;
+    font-size: 20px;
+    color: var(--yellow);
+    text-align: right;
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .ex-reps {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: right;
+    letter-spacing: 1px;
+  }
+
+  .ss-connector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    margin: 1px 0;
+  }
+  .ss-connector span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-transform: uppercase;
+  }
+  .ss-connector.blue span { color: #60A5FA; }
+  .ss-connector.green span { color: var(--green); }
+  .ss-connector-line { flex: 1; height: 1px; background: var(--red); opacity: 0.3; }
+  .ss-connector.blue .ss-connector-line { background: var(--blue); }
+  .ss-connector.green .ss-connector-line { background: var(--green); }
+
+  /* ── L-SIT PROGRESSION ── */
+  .progression-tag {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--yellow);
+    background: rgba(255,213,0,0.08);
+    border: 1px solid rgba(255,213,0,0.25);
+    border-radius: 2px;
+    padding: 2px 6px;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .progression-levels {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .prog-level {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 4px;
+    padding: 6px 8px;
+    border-left: 2px solid rgba(255,213,0,0.3);
+  }
+
+  .prog-level-num {
+    font-family: 'Black Ops One', cursive;
+    font-size: 11px;
+    color: var(--yellow);
+    white-space: nowrap;
+    min-width: 32px;
+  }
+
+  .prog-level-desc {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.4;
+  }
+
+  .prog-level-desc strong {
+    color: var(--text);
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1px;
+  }
+
+  /* ── NOTES ── */
+  .notes-box {
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-top: 24px;
+  }
+  .notes-box.am-notes { background: rgba(255,213,0,0.05); border: 1px solid rgba(255,213,0,0.18); }
+  .notes-box.pm-notes { background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.2); }
+  .notes-box.bw-notes { background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.2); }
+
+  .notes-title {
+    font-family: 'Black Ops One', cursive;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .am-notes .notes-title { color: var(--yellow); }
+  .pm-notes .notes-title { color: #60A5FA; }
+  .bw-notes .notes-title { color: var(--green); }
+
+  .notes-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .notes-list li {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    padding-left: 13px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .notes-list li::before { content: '▸'; position: absolute; left: 0; }
+  .am-notes .notes-list li::before { color: var(--yellow); }
+  .pm-notes .notes-list li::before { color: #60A5FA; }
+  .bw-notes .notes-list li::before { color: var(--green); }
+
+  .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<!-- ══ HOMEPAGE ══ -->
+<div id="homepage">
+  <div class="home-hero">
+    <div class="home-hero-label">// YOUR TRAINING HUB //</div>
+    <h1>PARK<br><span>DESTROYER</span></h1>
+    <div class="home-hero-sub">Select a workout to begin.<br>Timer starts automatically when you're in.</div>
+  </div>
+
+  <div class="home-grid">
+
+    <div class="workout-card card-am" onclick="goToSession('am')">
+      <div class="card-icon">🔥</div>
+      <div class="card-body">
+        <div class="card-title">PARK DESTROYER</div>
+        <div class="card-meta">60 MIN · FULL BODY HYPERTROPHY<br>BANDS + BODYWEIGHT · NO MERCY</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-pm" onclick="goToSession('pm')">
+      <div class="card-icon">🌙</div>
+      <div class="card-body">
+        <div class="card-title">RECOVERY PUMP</div>
+        <div class="card-meta">30 MIN · MODERATE INTENSITY<br>BLOOD FLOW + VOLUME</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-bw" onclick="goToSession('bw')">
+      <div class="card-icon">⚡</div>
+      <div class="card-body">
+        <div class="card-title">NO EXCUSES</div>
+        <div class="card-meta">30 MIN · MAX INTENSITY<br>ZERO EQUIPMENT · ANYWHERE</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-arms" onclick="goToSession('arms')">
+      <div class="card-icon">💪</div>
+      <div class="card-body">
+        <div class="card-title">ARM DESTROYER</div>
+        <div class="card-meta">45 MIN · BICEPS + TRICEPS + FOREARMS<br>BANDS + BODYWEIGHT</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-daily" onclick="goToSession('daily')">
+      <div class="card-badge badge-daily">Every Day</div>
+      <div class="card-icon">💀</div>
+      <div class="card-body">
+        <div class="card-title">THE BLITZ</div>
+        <div class="card-meta">10 MIN · ZERO BREAKS · AUTO TIMER<br>DAILY NON-NEGOTIABLE</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-gym" onclick="goToSession('gym')">
+      <div class="card-icon">🏋️</div>
+      <div class="card-body">
+        <div class="card-title">GYM DESTROYER</div>
+        <div class="card-meta">90 MIN · FULL BODY HYPERTROPHY<br>DUMBBELLS + CABLES + PULL-UP BAR</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ STICKY RIBBON (hidden until in workout) ══ -->
+<div class="sticky-timer" id="sticky-timer" style="display:none;">
+  <button class="home-btn" onclick="goHome()">⌂ HOME</button>
+  <div class="timer-session-tag" id="timer-session-tag">AM</div>
+  <div id="timer-display">00:00</div>
+  <div class="timer-progress-mini"><div id="progress-bar-mini"></div></div>
+  <div class="timer-btns">
+    <button class="timer-btn" id="start-btn" onclick="toggleTimer()">Start</button>
+    <button class="timer-btn" id="reset-btn" onclick="resetTimer()">Reset</button>
+  </div>
+</div>
+
+<!-- ══ PAGE HEADER (hidden until in workout) ══ -->
+<div class="page-header" id="page-header" style="display:none;">
+  <div class="header-label" id="header-label">// MORNING SESSION //</div>
+  <h1 id="header-h1">PARK<br><span>DESTROYER</span></h1>
+  <div class="meta-bar" id="header-meta">
+    <span class="meta-pill">⏱ 60 MIN</span>
+    <span class="meta-pill">🔥 FULL BODY HYPERTROPHY</span>
+    <span class="meta-pill">🏋 BANDS + BODYWEIGHT</span>
+    <span class="meta-pill">NO MERCY</span>
+  </div>
+</div>
+
+<div class="content" id="workout-content" style="display:none;">
+
+<!-- ════════════════════════════
+     AM SESSION
+════════════════════════════ -->
+<div class="session-panel" id="panel-am">
+
+  <!-- P1: IGNITION -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PHASE 01</div>
+      <div class="phase-title">IGNITION</div>
+      <div class="phase-time">0–7 MIN</div>
+    </div>
+    <div class="superset-block" id="ss0">
+      <div class="superset-label" onclick="toggleDone('ss0')">
+        <span class="ss-tag">Circuit · 1 Round · No Rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Arm Circles + Shoulder Rolls</div><div class="ex-note">Big circles, both directions</div></div>
+          <div><div class="ex-sets">:30</div><div class="ex-reps">each way</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dead Hang</div><div class="ex-note">Full hang — decompress spine, activate grip</div></div>
+          <div><div class="ex-sets">:45</div><div class="ex-reps">hold</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Scapular Pull-ups</div><div class="ex-note">Retract and depress — activate lats before loading</div></div>
+          <div><div class="ex-sets">2×10</div><div class="ex-reps">slow</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Leg Swings + Hip Circles</div><div class="ex-note">Front/back then lateral</div></div>
+          <div><div class="ex-sets">:30</div><div class="ex-reps">each direction</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Pull-Aparts</div><div class="ex-note">Squeeze hard at end range — warm rear delts</div></div>
+          <div><div class="ex-sets">20 reps</div><div class="ex-reps">slow eccentric</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2: PULL -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PHASE 02</div>
+      <div class="phase-title">PULL ANNIHILATION</div>
+      <div class="phase-time">7–22 MIN</div>
+    </div>
+    <div class="superset-block" id="ss1">
+      <div class="superset-label" onclick="toggleDone('ss1')">
+        <span class="ss-tag">Superset A · 4 Rounds · 45s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Wide-Grip Pull-ups</div><div class="ex-note">Dead hang to chin over bar — full ROM every rep</div></div>
+          <div><div class="ex-sets">4×8</div><div class="ex-reps">controlled</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Bent-Over Row</div><div class="ex-note">Stand on band — elbows flared, hard squeeze at top</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">explosive pull</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="superset-block" id="ss2">
+      <div class="superset-label" onclick="toggleDone('ss2')">
+        <span class="ss-tag">Superset B · 3 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Commando Pull-ups</div><div class="ex-note">Alternate which side of bar the head goes to</div></div>
+          <div><div class="ex-sets">3×6</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Face Pull</div><div class="ex-note">Anchor band high — pull to forehead, elbows high and wide</div></div>
+          <div><div class="ex-sets">3×20</div><div class="ex-reps">slow squeeze</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P3: PUSH -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PHASE 03</div>
+      <div class="phase-title">PUSH DESTRUCTION</div>
+      <div class="phase-time">22–37 MIN</div>
+    </div>
+    <div class="superset-block" id="ss3">
+      <div class="superset-label" onclick="toggleDone('ss3')">
+        <span class="ss-tag">Superset C · 4 Rounds · 45s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Archer Push-ups</div><div class="ex-note">Hands wide — shift full weight side to side, outside arm nearly straight</div></div>
+          <div><div class="ex-sets">4×8</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Chest Press</div><div class="ex-note">Wrap band around bar behind — explosive press forward</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">explosive</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="superset-block" id="ss4">
+      <div class="superset-label" onclick="toggleDone('ss4')">
+        <span class="ss-tag">Superset D · 4 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Bar Dips</div><div class="ex-note">Lean forward for chest — 3s slow down, explode up</div></div>
+          <div><div class="ex-sets">4×12</div><div class="ex-reps">controlled</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Diamond Push-ups to Failure</div><div class="ex-note">Go until you literally can't. That's the set.</div></div>
+          <div><div class="ex-sets">4×MAX</div><div class="ex-reps">failure every time</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P4: LEGS + CORE -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PHASE 04</div>
+      <div class="phase-title">LEG + CORE OBLITERATION</div>
+      <div class="phase-time">37–52 MIN</div>
+    </div>
+    <div class="superset-block" id="ss5">
+      <div class="superset-label" onclick="toggleDone('ss5')">
+        <span class="ss-tag">Superset E · 4 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Bulgarian Split Squat</div><div class="ex-note">Rear foot on bench/bar — band over shoulders for load</div></div>
+          <div><div class="ex-sets">4×10</div><div class="ex-reps">each leg</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Explosive Jump Lunge</div><div class="ex-note">Alternate legs — land soft, drive hard</div></div>
+          <div><div class="ex-sets">4×20</div><div class="ex-reps">total alternating</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Toes-to-Bar</div><div class="ex-note">Hang from pull-up bar — no swing, full control, slow down</div></div>
+          <div><div class="ex-sets">4×12</div><div class="ex-reps">slow eccentric</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block" id="ss6">
+      <div class="superset-label" onclick="toggleDone('ss6')">
+        <span class="ss-tag">Superset F · 3 Rounds · No rest between exercises</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Glute Bridge Pulse</div><div class="ex-note">Band above knees — 3-second squeeze hold at top</div></div>
+          <div><div class="ex-sets">3×20</div><div class="ex-reps">pulsing at top</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <!-- L-SIT PROGRESSION -->
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">L-Sit Progression</div>
+            <div class="ex-note">Work the hardest level you can hold with straight arms for :20</div>
+            <div class="progression-tag">📈 4-LEVEL BUILD-UP</div>
+            <div class="progression-levels">
+              <div class="prog-level">
+                <div class="prog-level-num">LVL 1</div>
+                <div class="prog-level-desc"><strong>Tuck Sit</strong>Both knees pulled to chest, feet fully off ground. Build compression strength.</div>
+              </div>
+              <div class="prog-level">
+                <div class="prog-level-num">LVL 2</div>
+                <div class="prog-level-desc"><strong>Single-Leg Extension</strong>One leg tucked, one leg fully extended and parallel. Hold :10 each side.</div>
+              </div>
+              <div class="prog-level">
+                <div class="prog-level-num">LVL 3</div>
+                <div class="prog-level-desc"><strong>Straddle L-Sit</strong>Both legs extended but spread at ~45°. Easier than full L but harder than tuck.</div>
+              </div>
+              <div class="prog-level">
+                <div class="prog-level-num">LVL 4</div>
+                <div class="prog-level-desc"><strong>Full L-Sit</strong>Both legs parallel to ground, squeezed together. The real thing.</div>
+              </div>
+            </div>
+          </div>
+          <div><div class="ex-sets">3×:20</div><div class="ex-reps">hold each</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P5: GRAVE -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PHASE 05</div>
+      <div class="phase-title">THE GRAVE</div>
+      <div class="phase-time">52–60 MIN</div>
+    </div>
+    <div class="superset-block" id="ss7">
+      <div class="superset-label" onclick="toggleDone('ss7')">
+        <span class="ss-tag">Death Circuit · 2 Rounds · No rest until done</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Pull-ups to Failure</div><div class="ex-note">Whatever you've got left</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Push-ups to Failure</div><div class="ex-note">Standard — full depth, no half reps</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Squat Jumps</div><div class="ex-note">Max height, land deep in squat</div></div>
+          <div><div class="ex-sets">20</div><div class="ex-reps">explosive</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Curl + Press</div><div class="ex-note">Stand on band — curl to shoulder press, one fluid motion</div></div>
+          <div><div class="ex-sets">×15</div><div class="ex-reps">no pause</div></div>
+        </div>
+        <div class="ss-connector"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dead Hang Hold</div><div class="ex-note">Hold until your grip fails. Literally.</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">to failure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="notes-box am-notes">
+    <div class="notes-title">⚡ PROTOCOL NOTES</div>
+    <ul class="notes-list">
+      <li>Supersets = NO rest between exercises within the block. Rest only after the full round.</li>
+      <li>Anchor your band to any bar, fence post, or playground structure for rows/face pulls.</li>
+      <li>Bulgarian split squats: loop band under front foot, over shoulders for resistance.</li>
+      <li>Every set should be RPE 9–10. If it feels comfortable, you're doing it wrong.</li>
+      <li>Failure sets: hit true failure, then 3 rest-pause reps with a 5s break — squeeze more out.</li>
+      <li>L-sit: pick the hardest level you can hold cleanly for :20. Graduate one level when 3×:20 feels easy.</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-am -->
+
+
+<!-- ════════════════════════════
+     PM SESSION
+════════════════════════════ -->
+<div class="session-panel" id="panel-pm">
+
+  <!-- PM P1: MOBILIZE -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PM · 01</div>
+      <div class="phase-title">MOBILIZE + PRIME</div>
+      <div class="phase-time">0–5 MIN</div>
+    </div>
+    <div class="superset-block pm-block" id="pm0">
+      <div class="superset-label" onclick="toggleDone('pm0')">
+        <span class="ss-tag">Flow · 1 Round · Continuous</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">90/90 Hip Stretch</div><div class="ex-note">Both sides — breathe into the stretch, no bouncing</div></div>
+          <div><div class="ex-sets">:60</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">World's Greatest Stretch</div><div class="ex-note">Hip flexor + thoracic rotation — move slow and deliberate</div></div>
+          <div><div class="ex-sets">5 reps</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Shoulder Dislocates</div><div class="ex-note">Arms straight, wide grip — slow arcs over head</div></div>
+          <div><div class="ex-sets">15 reps</div><div class="ex-reps">continuous</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PM P2: UPPER PUMP -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PM · 02</div>
+      <div class="phase-title">UPPER BODY PUMP</div>
+      <div class="phase-time">5–17 MIN</div>
+    </div>
+    <div class="superset-block pm-block" id="pm1">
+      <div class="superset-label" onclick="toggleDone('pm1')">
+        <span class="ss-tag">Superset G · 3 Rounds · 60s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Chin-ups</div><div class="ex-note">Underhand grip — stop 1 rep before failure. Quality over quantity.</div></div>
+          <div><div class="ex-sets">3×6</div><div class="ex-reps">controlled</div></div>
+        </div>
+        <div class="ss-connector blue"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Bicep Curl</div><div class="ex-note">Stand on band — slow 3s eccentric, squeeze at top</div></div>
+          <div><div class="ex-sets">3×12</div><div class="ex-reps">slow eccentric</div></div>
+        </div>
+        <div class="ss-connector blue"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Overhead Tricep Extension</div><div class="ex-note">Anchor band low — arms overhead, extend fully, feel the stretch</div></div>
+          <div><div class="ex-sets">3×15</div><div class="ex-reps">full extension</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="superset-block pm-block" id="pm2">
+      <div class="superset-label" onclick="toggleDone('pm2')">
+        <span class="ss-tag">Superset H · 3 Rounds · 45s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Pike Push-ups</div><div class="ex-note">Hips high — loads anterior delts, quality shoulder work</div></div>
+          <div><div class="ex-sets">3×10</div><div class="ex-reps">controlled</div></div>
+        </div>
+        <div class="ss-connector blue"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Band Lateral Raise</div><div class="ex-note">Stand on band — slow raise to shoulder height, no swinging</div></div>
+          <div><div class="ex-sets">3×15</div><div class="ex-reps">slow and controlled</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PM P3: LOWER + CORE -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PM · 03</div>
+      <div class="phase-title">LOWER + CORE FLUSH</div>
+      <div class="phase-time">17–27 MIN</div>
+    </div>
+    <div class="superset-block pm-block" id="pm3">
+      <div class="superset-label" onclick="toggleDone('pm3')">
+        <span class="ss-tag">Superset I · 3 Rounds · 45s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Reverse Nordic Curl</div><div class="ex-note">Kneel, hook feet under bar — lower back slowly, return with hamstrings</div></div>
+          <div><div class="ex-sets">3×6</div><div class="ex-reps">slow lower</div></div>
+        </div>
+        <div class="ss-connector blue"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Single-Leg Glute Bridge</div><div class="ex-note">One leg extended — drive through heel, 2s squeeze at top</div></div>
+          <div><div class="ex-sets">3×12</div><div class="ex-reps">each leg</div></div>
+        </div>
+        <div class="ss-connector blue"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Hanging Knee Raise (slow)</div><div class="ex-note">2s up, 3s down — no momentum, all abs</div></div>
+          <div><div class="ex-sets">3×12</div><div class="ex-reps">slow tempo</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="superset-block pm-block" id="pm4">
+      <div class="superset-label" onclick="toggleDone('pm4')">
+        <span class="ss-tag">Core Finisher · 2 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Hollow Body Hold</div><div class="ex-note">Lower back pressed to ground — arms and legs extended low</div></div>
+          <div><div class="ex-sets">2×:30</div><div class="ex-reps">hold</div></div>
+        </div>
+        <div class="ss-connector blue"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Side Plank + Hip Dip</div><div class="ex-note">Lower hip to ground and back — oblique isolation</div></div>
+          <div><div class="ex-sets">2×12</div><div class="ex-reps">each side</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PM P4: COOL DOWN -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">PM · 04</div>
+      <div class="phase-title">COOL DOWN</div>
+      <div class="phase-time">27–30 MIN</div>
+    </div>
+    <div class="superset-block pm-block" id="pm5">
+      <div class="superset-label" onclick="toggleDone('pm5')">
+        <span class="ss-tag">Stretch Flow · 1 Round · Hold each</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Dead Hang Decompression</div><div class="ex-note">Full relaxed hang — breathe deep, let everything go</div></div>
+          <div><div class="ex-sets">:60</div><div class="ex-reps">hold</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Chest + Shoulder Stretch</div><div class="ex-note">Hands clasped behind back, squeeze shoulder blades</div></div>
+          <div><div class="ex-sets">:30</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Hip Flexor Lunge Stretch</div><div class="ex-note">Long lunge, back knee down — sink in slowly, breathe</div></div>
+          <div><div class="ex-sets">:45</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Child's Pose</div><div class="ex-note">Arms extended — breathe into lower back, full release</div></div>
+          <div><div class="ex-sets">:60</div><div class="ex-reps">hold</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="notes-box pm-notes">
+    <div class="notes-title">🌙 PM SESSION NOTES</div>
+    <ul class="notes-list">
+      <li>This session flushes blood back into muscles worked this morning — lower intensity, higher mindfulness.</li>
+      <li>Stop ALL working sets 1–2 reps before failure. Stimulate, don't destroy.</li>
+      <li>Rest 60s between rounds (not 30s). Breathe. Keep heart rate controlled.</li>
+      <li>The cool-down is mandatory — it directly improves your recovery and sleep quality.</li>
+      <li>Total effort should feel like a 6–7/10. If you're gassing, slow down.</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-pm -->
+
+<!-- ════════════════════════════
+     BW SESSION — PURE BODYWEIGHT
+════════════════════════════ -->
+<div class="session-panel" id="panel-bw">
+
+  <!-- BW P1: IGNITE -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">BW · 01</div>
+      <div class="phase-title">PRIME + IGNITE</div>
+      <div class="phase-time">0–4 MIN</div>
+    </div>
+    <div class="superset-block bw-block" id="bw0">
+      <div class="superset-label" onclick="toggleDone('bw0')">
+        <span class="ss-tag">Activation · 1 Round · No Rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Inchworm + Push-up</div><div class="ex-note">Walk hands out to plank, one push-up, walk back — full body wake-up</div></div>
+          <div><div class="ex-sets">8 reps</div><div class="ex-reps">slow</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Jumping Jacks</div><div class="ex-note">Full range — get the heart rate up fast</div></div>
+          <div><div class="ex-sets">:30</div><div class="ex-reps">continuous</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Hip Flexor Lunge + Rotation</div><div class="ex-note">Lunge forward, reach arm to sky — open thoracic spine</div></div>
+          <div><div class="ex-sets">6 reps</div><div class="ex-reps">each side</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BW P2: UPPER HELL -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">BW · 02</div>
+      <div class="phase-title">UPPER BODY HELL</div>
+      <div class="phase-time">4–14 MIN</div>
+    </div>
+
+    <div class="superset-block bw-block" id="bw1">
+      <div class="superset-label" onclick="toggleDone('bw1')">
+        <span class="ss-tag">Superset A · 4 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Archer Push-ups</div><div class="ex-note">Hands wide — shift full bodyweight side to side. Straight outside arm = chest isolation</div></div>
+          <div><div class="ex-sets">4×10</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Diamond Push-ups</div><div class="ex-note">Thumbs and index fingers touching — elbows tight to body, full depth</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">full depth</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Pike Push-ups</div><div class="ex-note">Hips high, forehead to floor — pure anterior delt work</div></div>
+          <div><div class="ex-sets">4×12</div><div class="ex-reps">controlled</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block bw-block" id="bw2">
+      <div class="superset-label" onclick="toggleDone('bw2')">
+        <span class="ss-tag">Superset B · 3 Rounds · 20s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Wide Push-ups to Failure</div><div class="ex-note">Hands outside shoulder-width — chest overload, go until collapse</div></div>
+          <div><div class="ex-sets">3×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Tricep Dips (floor or surface)</div><div class="ex-note">Hands behind on edge, fingers forward — lower until arms parallel</div></div>
+          <div><div class="ex-sets">3×20</div><div class="ex-reps">full range</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BW P3: LEG INFERNO -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">BW · 03</div>
+      <div class="phase-title">LEG INFERNO</div>
+      <div class="phase-time">14–23 MIN</div>
+    </div>
+
+    <div class="superset-block bw-block" id="bw3">
+      <div class="superset-label" onclick="toggleDone('bw3')">
+        <span class="ss-tag">Superset C · 4 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Pistol Squat Progression</div><div class="ex-note">Use a surface to assist if needed — lower slow, drive up hard through heel</div></div>
+          <div><div class="ex-sets">4×6</div><div class="ex-reps">each leg</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Jump Squat</div><div class="ex-note">Max height every rep — land silently, absorb into squat</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">explosive</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Explosive Jump Lunges</div><div class="ex-note">Alternate legs mid-air — land soft, drive hard</div></div>
+          <div><div class="ex-sets">4×20</div><div class="ex-reps">total alternating</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block bw-block" id="bw4">
+      <div class="superset-label" onclick="toggleDone('bw4')">
+        <span class="ss-tag">Superset D · 3 Rounds · 20s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Single-Leg Glute Bridge</div><div class="ex-note">One leg extended — drive heel into ground, 2s squeeze hold at top</div></div>
+          <div><div class="ex-sets">3×15</div><div class="ex-reps">each leg</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Wall Sit</div><div class="ex-note">90° angle — thighs parallel to ground, back flat to wall, suffer</div></div>
+          <div><div class="ex-sets">3×:45</div><div class="ex-reps">hold to failure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BW P4: CORE MELTDOWN -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">BW · 04</div>
+      <div class="phase-title">CORE MELTDOWN</div>
+      <div class="phase-time">23–28 MIN</div>
+    </div>
+
+    <div class="superset-block bw-block" id="bw5">
+      <div class="superset-label" onclick="toggleDone('bw5')">
+        <span class="ss-tag">Core Circuit · 3 Rounds · No rest between exercises</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Hollow Body Hold</div><div class="ex-note">Lower back glued to ground, arms and legs extended low — pure tension</div></div>
+          <div><div class="ex-sets">3×:30</div><div class="ex-reps">hold</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">V-ups</div><div class="ex-note">Legs and torso meet at the top — control the down, explode up</div></div>
+          <div><div class="ex-sets">3×15</div><div class="ex-reps">explosive</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Side Plank + Hip Dip</div><div class="ex-note">Hip to ground and back — oblique isolation each side</div></div>
+          <div><div class="ex-sets">3×12</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Mountain Climbers</div><div class="ex-note">Fast — drive knees to chest alternating, hips stay low and still</div></div>
+          <div><div class="ex-sets">3×:30</div><div class="ex-reps">max speed</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BW P5: THE COFFIN -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">BW · 05</div>
+      <div class="phase-title">THE COFFIN</div>
+      <div class="phase-time">28–30 MIN</div>
+    </div>
+
+    <div class="superset-block bw-block" id="bw6">
+      <div class="superset-label" onclick="toggleDone('bw6')">
+        <span class="ss-tag">Final Burn · 1 Round · Zero Rest · Leave Nothing</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Burpees</div><div class="ex-note">Full extension at top, chest to ground at bottom — no half reps</div></div>
+          <div><div class="ex-sets">15</div><div class="ex-reps">max speed</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Push-ups to Failure</div><div class="ex-note">Standard — full depth, every rep counts</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Squat Jumps to Failure</div><div class="ex-note">Go until your legs physically stop cooperating</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector green"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Hollow Body Hold to Failure</div><div class="ex-note">Hold until your lower back peels off the floor. That's done.</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="notes-box bw-notes">
+    <div class="notes-title">💪 BODYWEIGHT PROTOCOL NOTES</div>
+    <ul class="notes-list">
+      <li>Zero equipment. Zero excuses. Every set is RPE 9–10 — if it feels manageable, go faster or add reps.</li>
+      <li>No rest between exercises within a superset. Only rest after the full round (and keep it short).</li>
+      <li>Pistol squats: hold a doorframe, tree, or bench edge for balance assist — lower as deep as possible.</li>
+      <li>Failure sets mean true failure — when you hit it, do 3 rest-pause reps with a 5s break to squeeze more out.</li>
+      <li>The Coffin finisher is done once, not twice. Go at absolute maximum from the first rep.</li>
+      <li>30 minutes, all bodyweight, nowhere to hide — this should feel as hard as the 60-minute session.</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-bw -->
+
+<!-- ════════════════════════════
+     DAILY 10-MIN BLITZ
+════════════════════════════ -->
+<div class="session-panel" id="panel-daily">
+
+  <div class="blitz-intro">
+    <div class="blitz-intro-title">⚡ THE DAILY NON-NEGOTIABLE</div>
+    <div class="blitz-intro-text">
+      10 exercises. 10 rounds. Zero breaks. Every single day — no excuses, no skips.<br>
+      Hit START and the timer drives you automatically through each interval. Pure suffering, fully compressed.
+    </div>
+  </div>
+
+  <!-- LIVE INTERVAL DISPLAY -->
+  <div class="interval-display">
+    <div class="interval-num" id="interval-num">EXERCISE 1 OF 10</div>
+    <div class="interval-exercise-name" id="interval-ex-name">EXPLOSIVE PUSH-UPS</div>
+    <div class="interval-exercise-note" id="interval-ex-note">Chest to ground, explode off floor — hands leave ground</div>
+    <div class="interval-countdown" id="interval-countdown">45</div>
+    <div class="interval-type-tag" id="interval-type-tag">▶ PRESS START TO BEGIN</div>
+    <div class="interval-progress-bar"><div id="interval-fill"></div></div>
+    <div class="interval-controls">
+      <button class="interval-btn" id="blitz-start-btn" onclick="toggleBlitz()">▶ START</button>
+      <button class="interval-btn" id="blitz-reset-btn" onclick="resetBlitz()">Reset</button>
+    </div>
+  </div>
+
+  <!-- EXERCISE QUEUE -->
+  <div class="exercise-queue" id="exercise-queue">
+    <!-- populated by JS -->
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="notes-box daily-notes">
+    <div class="notes-title">🔥 DAILY BLITZ RULES</div>
+    <ul class="notes-list">
+      <li>This is a daily habit — do it every morning before anything else, or stack it onto any session.</li>
+      <li>Zero breaks between exercises. The timer moves you automatically — just keep up.</li>
+      <li>Every exercise is 45 seconds. 10 exercises = exactly 7:30 of work. The last 2:30 is the death round.</li>
+      <li>RPE must be 10/10 on every interval. Pace yourself only enough to survive to the next exercise.</li>
+      <li>All bodyweight — do it anywhere: bedroom floor, hotel room, park, doesn't matter.</li>
+      <li>The death round at the end is a full-body chain. If you finish it, you earned the day.</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-daily -->
+
+<!-- ════════════════════════════
+     ARMS — BANDS + BODYWEIGHT
+════════════════════════════ -->
+<div class="session-panel" id="panel-arms">
+
+  <!-- ARMS P1: PRIME -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">ARMS · 01</div>
+      <div class="phase-title">PRIME THE PUMPS</div>
+      <div class="phase-time">0–5 MIN</div>
+    </div>
+    <div class="superset-block arms-block" id="ar0">
+      <div class="superset-label" onclick="toggleDone('ar0')">
+        <span class="ss-tag">Activation · 1 Round · No Rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Pull-Aparts</div>
+            <div class="ex-note">Wide grip — squeeze rear delts hard at full extension. Warm the elbow joints.</div>
+          </div>
+          <div><div class="ex-sets">25 reps</div><div class="ex-reps">slow</div></div>
+        </div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Bicep Curl (light)</div>
+            <div class="ex-note">Stand on band — full ROM, slow tempo to drive blood in before loading</div>
+          </div>
+          <div><div class="ex-sets">20 reps</div><div class="ex-reps">warm-up weight</div></div>
+        </div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Wrist Circles + Forearm Stretch</div>
+            <div class="ex-note">Both directions — protect the connective tissue before heavy curl work</div>
+          </div>
+          <div><div class="ex-sets">:30</div><div class="ex-reps">each direction</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARMS P2: BICEPS -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">ARMS · 02</div>
+      <div class="phase-title">BICEP ANNIHILATION</div>
+      <div class="phase-time">5–20 MIN</div>
+    </div>
+
+    <div class="superset-block arms-block" id="ar1">
+      <div class="superset-label" onclick="toggleDone('ar1')">
+        <span class="ss-tag">Superset A · 4 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Curl — 21s Protocol</div>
+            <div class="ex-note">7 reps bottom half only → 7 reps top half only → 7 full reps. No stopping.</div>
+            <div class="pump-badge">💥 PEAK CONTRACTION PROTOCOL</div>
+          </div>
+          <div><div class="ex-sets">4×21</div><div class="ex-reps">no pause</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Curl Iso Hold</div>
+            <div class="ex-note">Stand on band — curl to 90°, hold hard for :10, lower over 5 slow seconds. Bicep under full tension the whole time.</div>
+          </div>
+          <div><div class="ex-sets">4×5</div><div class="ex-reps">:10 hold each</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block arms-block" id="ar2">
+      <div class="superset-label" onclick="toggleDone('ar2')">
+        <span class="ss-tag">Superset B · 4 Rounds · 20s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Hammer Curl</div>
+            <div class="ex-note">Neutral grip — thumbs up. Hits brachialis and brachioradialis. 3s slow down.</div>
+          </div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">slow eccentric</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Concentration Curl</div>
+            <div class="ex-note">Anchor band low — elbow braced on inner thigh, curl to chin. Full peak squeeze.</div>
+          </div>
+          <div><div class="ex-sets">4×12</div><div class="ex-reps">each arm</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Curl Drop Set to Failure</div>
+            <div class="ex-note">Stand on band with both feet — curl to failure, then shift to one foot (less tension) and keep going until nothing left.</div>
+          </div>
+          <div><div class="ex-sets">4×MAX</div><div class="ex-reps">drop set</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARMS P3: TRICEPS -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">ARMS · 03</div>
+      <div class="phase-title">TRICEP DESTRUCTION</div>
+      <div class="phase-time">20–35 MIN</div>
+    </div>
+
+    <div class="superset-block arms-block" id="ar3">
+      <div class="superset-label" onclick="toggleDone('ar3')">
+        <span class="ss-tag">Superset C · 4 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Overhead Tricep Extension</div>
+            <div class="ex-note">Anchor band low behind you — arms fully overhead, extend to lockout. Long head fully stretched.</div>
+          </div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">full lockout</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Diamond Push-ups</div>
+            <div class="ex-note">Thumbs and index fingers touching — elbows tight to ribs, full depth. Pure tricep isolation.</div>
+          </div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">full depth</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Tricep Pushdown</div>
+            <div class="ex-note">Anchor band high — elbows pinned to sides, push to full lockout. Squeeze hard at bottom.</div>
+          </div>
+          <div><div class="ex-sets">4×20</div><div class="ex-reps">squeeze at lockout</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block arms-block" id="ar4">
+      <div class="superset-label" onclick="toggleDone('ar4')">
+        <span class="ss-tag">Superset D · 3 Rounds · 20s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Floor Tricep Dips</div>
+            <div class="ex-note">Hands behind on surface, fingers forward — lower until arms parallel, drive through palms</div>
+          </div>
+          <div><div class="ex-sets">3×20</div><div class="ex-reps">controlled</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Diamond Push-ups to Failure</div>
+            <div class="ex-note">After dips — arms already smoked. Go until total collapse. That's the point.</div>
+          </div>
+          <div><div class="ex-sets">3×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARMS P4: FOREARMS + GRIP -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">ARMS · 04</div>
+      <div class="phase-title">FOREARMS + GRIP</div>
+      <div class="phase-time">35–42 MIN</div>
+    </div>
+
+    <div class="superset-block arms-block" id="ar5">
+      <div class="superset-label" onclick="toggleDone('ar5')">
+        <span class="ss-tag">Superset E · 3 Rounds · 20s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Wrist Curl</div>
+            <div class="ex-note">Sit or kneel — forearms on thighs, palms up. Curl wrists up and squeeze. Flexor work.</div>
+          </div>
+          <div><div class="ex-sets">3×20</div><div class="ex-reps">each wrist</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Reverse Wrist Curl</div>
+            <div class="ex-note">Palms down — extend wrists up against resistance. Extensor work. Prevents imbalance.</div>
+          </div>
+          <div><div class="ex-sets">3×15</div><div class="ex-reps">controlled</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Grip Crush Hold</div>
+            <div class="ex-note">Fold band several times into a thick bundle — squeeze as hard as possible for full duration. Pure grip and forearm flexor work.</div>
+          </div>
+          <div><div class="ex-sets">3×:45</div><div class="ex-reps">max squeeze</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARMS P5: THE BURN-OUT -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">ARMS · 05</div>
+      <div class="phase-title">THE BURN-OUT</div>
+      <div class="phase-time">42–45 MIN</div>
+    </div>
+
+    <div class="superset-block arms-block" id="ar6">
+      <div class="superset-label" onclick="toggleDone('ar6')">
+        <span class="ss-tag">Final Pump · 1 Round · Zero Rest · Continuous</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Curl to Failure</div>
+            <div class="ex-note">Stand on band — curl until arms literally stop working</div>
+          </div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Diamond Push-ups to Failure</div>
+            <div class="ex-note">Immediately after curls — triceps already pre-fatigued. Maximum damage.</div>
+          </div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Overhead Extension to Failure</div>
+            <div class="ex-note">Long head fully stretched — go until elbows can't lock out</div>
+          </div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector purple"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div>
+            <div class="ex-name">Band Curl Iso Hold to Failure</div>
+            <div class="ex-note">Curl to 90° and hold — no movement, just squeeze until your biceps physically give out. Session over.</div>
+          </div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">total failure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="notes-box arms-notes">
+    <div class="notes-title">💪 ARMS PROTOCOL NOTES</div>
+    <ul class="notes-list">
+      <li>Run this as a dedicated arm day, or stack it after the AM session if you want maximum volume in a single day.</li>
+      <li>The 21s curl protocol is non-negotiable — partial reps in each range force constant tension across the full ROM.</li>
+      <li>Chin-up iso holds: the :10 hold at 90° + 5s negative is more effective than 5 standard chin-ups for bicep hypertrophy.</li>
+      <li>Anchor your band to any bar or post for pushdowns and overhead extensions — the angle changes the stimulus significantly.</li>
+      <li>Forearm work is not optional. Grip strength is your limiting factor on every pull movement. Build it.</li>
+      <li>Failure sets: when you hit true failure, rest 5 seconds, then squeeze out 3 more. That's where growth happens.</li>
+      <li>Expect significant soreness in the brachialis and long head tricep if you hit the iso holds and overhead work properly.</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-arms -->
+
+<!-- ════════════════════════════
+     GYM DESTROYER — 90 MIN
+     Dumbbells + Cables + Pull-up bar
+════════════════════════════ -->
+<div class="session-panel" id="panel-gym">
+
+  <!-- GYM P1: WARMUP -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">GYM · 01</div>
+      <div class="phase-title">PRIME + ACTIVATE</div>
+      <div class="phase-time">0–10 MIN</div>
+    </div>
+    <div class="superset-block gym-block" id="gm0">
+      <div class="superset-label" onclick="toggleDone('gm0')">
+        <span class="ss-tag">Activation Circuit · 2 Rounds · No Rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Scapular Pull-ups</div><div class="ex-note">Dead hang on pull-up bar — retract and depress only. Wake up the lats before loading.</div></div>
+          <div><div class="ex-sets">2×10</div><div class="ex-reps">slow</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Face Pull</div><div class="ex-note">Rope attachment at face height — pull to forehead, elbows high. Rotator cuff and rear delt activation.</div></div>
+          <div><div class="ex-sets">2×15</div><div class="ex-reps">light weight</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Lateral Raise (light)</div><div class="ex-note">Slow and controlled — wake up the delts before heavy pressing</div></div>
+          <div><div class="ex-sets">2×15</div><div class="ex-reps">warm-up weight</div></div>
+        </div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Hip Circles + Leg Swings</div><div class="ex-note">Loosen hips and hamstrings before squat and lunge work</div></div>
+          <div><div class="ex-sets">:30</div><div class="ex-reps">each direction</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM P2: PULL -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">GYM · 02</div>
+      <div class="phase-title">BACK + BICEPS OBLITERATION</div>
+      <div class="phase-time">10–35 MIN</div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm1">
+      <div class="superset-label" onclick="toggleDone('gm1')">
+        <span class="ss-tag">Superset A · 4 Rounds · 45s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Weighted Pull-ups</div><div class="ex-note">Hold a dumbbell between feet or wear a belt — full dead hang to chin over bar. The king of back mass.</div></div>
+          <div><div class="ex-sets">4×6</div><div class="ex-reps">add weight</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Straight-Arm Pulldown</div><div class="ex-note">Arms straight, hinge at shoulder — pull bar to thighs. Pure lat isolation, massive stretch at top.</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">slow squeeze</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm2">
+      <div class="superset-label" onclick="toggleDone('gm2')">
+        <span class="ss-tag">Superset B · 4 Rounds · 40s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Single-Arm Row</div><div class="ex-note">Knee on bench — drive elbow straight up, not out. Full stretch at bottom, hard squeeze at top. Go heavy.</div></div>
+          <div><div class="ex-sets">4×10</div><div class="ex-reps">each arm</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Seated Row (wide grip)</div><div class="ex-note">Wide bar — elbows flared out, pull to upper chest. Hits upper traps and rear delts differently to close grip.</div></div>
+          <div><div class="ex-sets">4×12</div><div class="ex-reps">explosive pull</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Hammer Curl</div><div class="ex-note">Neutral grip — alternating, 3s slow down. Brachialis thickness you can't get from standard curls.</div></div>
+          <div><div class="ex-sets">4×12</div><div class="ex-reps">each arm</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm3">
+      <div class="superset-label" onclick="toggleDone('gm3')">
+        <span class="ss-tag">Superset C · 3 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Bicep Curl — 21s Protocol</div><div class="ex-note">7 bottom-half → 7 top-half → 7 full reps. Constant tension. Arms will be on fire.</div></div>
+          <div><div class="ex-sets">3×21</div><div class="ex-reps">no rest mid-set</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Pull-ups to Failure</div><div class="ex-note">Bodyweight — after cables, biceps already pre-fatigued. Go until nothing left.</div></div>
+          <div><div class="ex-sets">3×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM P3: PUSH -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">GYM · 03</div>
+      <div class="phase-title">CHEST + SHOULDERS + TRICEPS</div>
+      <div class="phase-time">35–60 MIN</div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm4">
+      <div class="superset-label" onclick="toggleDone('gm4')">
+        <span class="ss-tag">Superset D · 4 Rounds · 45s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Incline Press</div><div class="ex-note">30–45° incline — full ROM, slow 3s down. Upper chest emphasis. Go as heavy as clean form allows.</div></div>
+          <div><div class="ex-sets">4×8</div><div class="ex-reps">heavy</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Chest Fly (low-to-high)</div><div class="ex-note">Cables set low — arc upward and together, squeeze pecs hard at top. Feel every fiber.</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">full squeeze</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm5">
+      <div class="superset-label" onclick="toggleDone('gm5')">
+        <span class="ss-tag">Superset E · 4 Rounds · 40s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Arnold Press</div><div class="ex-note">Start with palms facing you, rotate out as you press — hits all 3 delt heads in one movement.</div></div>
+          <div><div class="ex-sets">4×10</div><div class="ex-reps">controlled</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Lateral Raise</div><div class="ex-note">Single arm, cable at hip height — raise to shoulder height, 3s slow down. Lateral head isolation.</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">each arm</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Diamond Push-ups to Failure</div><div class="ex-note">After heavy pressing — chest and triceps already loaded. Go until collapse.</div></div>
+          <div><div class="ex-sets">4×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm6">
+      <div class="superset-label" onclick="toggleDone('gm6')">
+        <span class="ss-tag">Superset F · 3 Rounds · 30s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Tricep Pushdown (rope)</div><div class="ex-note">Rope attachment — flare hands apart at bottom, squeeze hard. Elbows pinned to sides throughout.</div></div>
+          <div><div class="ex-sets">3×15</div><div class="ex-reps">hard squeeze</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Overhead Tricep Extension</div><div class="ex-note">Both hands on one dumbbell overhead — long head fully stretched, lower slow, extend to lockout.</div></div>
+          <div><div class="ex-sets">3×12</div><div class="ex-reps">full stretch</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM P4: LEGS -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">GYM · 04</div>
+      <div class="phase-title">LEG DESTRUCTION</div>
+      <div class="phase-time">60–80 MIN</div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm7">
+      <div class="superset-label" onclick="toggleDone('gm7')">
+        <span class="ss-tag">Superset G · 4 Rounds · 45s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Bulgarian Split Squat</div><div class="ex-note">Rear foot elevated on bench — dumbbells in hands, lower until front thigh parallel. The hardest leg exercise without a barbell.</div></div>
+          <div><div class="ex-sets">4×10</div><div class="ex-reps">each leg</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Jump Squats</div><div class="ex-note">Bodyweight — max height every rep, land soft. Immediately after split squats = maximum burn.</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">explosive</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm8">
+      <div class="superset-label" onclick="toggleDone('gm8')">
+        <span class="ss-tag">Superset H · 4 Rounds · 40s rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Romanian Deadlift</div><div class="ex-note">Soft knee bend — hinge at hips, dumbbells trace down the shins, feel the hamstring stretch, drive hips forward. Keep back flat.</div></div>
+          <div><div class="ex-sets">4×10</div><div class="ex-reps">slow and controlled</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Pull-Through</div><div class="ex-note">Cable low between legs — hinge back until cable pulls tight, drive hips through to stand. Glute and hamstring overload.</div></div>
+          <div><div class="ex-sets">4×15</div><div class="ex-reps">hip drive focus</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Walking Lunges</div><div class="ex-note">Dumbbells in hands — long stride, knee lightly touches floor, drive through front heel to stand</div></div>
+          <div><div class="ex-sets">4×20</div><div class="ex-reps">total steps</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM P5: CORE -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">GYM · 05</div>
+      <div class="phase-title">CORE ANNIHILATION</div>
+      <div class="phase-time">80–88 MIN</div>
+    </div>
+
+    <div class="superset-block gym-block" id="gm9">
+      <div class="superset-label" onclick="toggleDone('gm9')">
+        <span class="ss-tag">Core Circuit · 3 Rounds · No rest between exercises</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Hanging Leg Raise</div><div class="ex-note">Pull-up bar — dead hang start, raise legs to parallel (or toes to bar), slow 3s down. Zero swing.</div></div>
+          <div><div class="ex-sets">3×15</div><div class="ex-reps">slow eccentric</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Cable Crunch</div><div class="ex-note">Rope overhead, kneel — crunch elbows to knees, not head to knees. Keep hips still. Squeeze at full contraction.</div></div>
+          <div><div class="ex-sets">3×20</div><div class="ex-reps">full crunch</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dumbbell Russian Twist</div><div class="ex-note">Feet off ground, lean back 45° — rotate side to side, touch dumbbell to floor each rep</div></div>
+          <div><div class="ex-sets">3×20</div><div class="ex-reps">each side</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Hollow Body Hold</div><div class="ex-note">Lower back pressed to floor — arms and legs extended low, hold the tension</div></div>
+          <div><div class="ex-sets">3×:30</div><div class="ex-reps">hold</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GYM P6: FINISHER -->
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-num">GYM · 06</div>
+      <div class="phase-title">THE FINISHER</div>
+      <div class="phase-time">88–90 MIN</div>
+    </div>
+    <div class="superset-block gym-block" id="gm10">
+      <div class="superset-label" onclick="toggleDone('gm10')">
+        <span class="ss-tag">Death Round · 1 Round · Zero Rest</span>
+        <span class="ss-check">☐</span>
+      </div>
+      <div class="exercises">
+        <div class="exercise-row">
+          <div><div class="ex-name">Pull-ups to Failure</div><div class="ex-note">After 90 minutes of volume — give everything you've got left</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Push-ups to Failure</div><div class="ex-note">Full depth — no half reps, no ego</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Jump Squats to Failure</div><div class="ex-note">After leg day volume — your legs will hate you. Max height until they stop working.</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">failure</div></div>
+        </div>
+        <div class="ss-connector teal"><div class="ss-connector-line"></div><span>into</span><div class="ss-connector-line"></div></div>
+        <div class="exercise-row">
+          <div><div class="ex-name">Dead Hang to Failure</div><div class="ex-note">Hang from pull-up bar — hold until your grip gives out completely. Session done.</div></div>
+          <div><div class="ex-sets">×MAX</div><div class="ex-reps">total failure</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="notes-box gym-notes">
+    <div class="notes-title">🏋️ GYM PROTOCOL NOTES</div>
+    <ul class="notes-list">
+      <li>Superset rule applies here too — no rest between exercises within a block, only rest after the full round.</li>
+      <li>Weighted pull-ups: grip a dumbbell between crossed feet, or loop a belt around one. Start lighter than you think.</li>
+      <li>Cable exercises: reset weight between sets only if needed — minimize downtime, keep heart rate elevated.</li>
+      <li>Dumbbell Bulgarian split squats are the hardest leg exercise in this session. Don't skip reps — each one counts double.</li>
+      <li>Romanian deadlifts: the stretch is the stimulus. If you're not feeling it in the hamstrings at the bottom, your hinge is wrong.</li>
+      <li>Failure sets at the end: rest-pause allowed — hit failure, rest 5s, squeeze out 3 more. That's where gains live.</li>
+      <li>Eat a full meal 60–90 minutes before this session. 90 minutes of this volume on an empty stomach is not the move.</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-gym -->
+
+</div><!-- /content -->
+
+<script>
+  let timerInterval = null;
+  let seconds = 0;
+  let running = false;
+  let currentSession = 'am';
+  const totalSecs = { am: 3600, pm: 1800, bw: 1800, daily: 600, arms: 2700, gym: 5400 };
+
+  // ── NAVIGATION ──
+  function goToSession(session) {
+    currentSession = session;
+    if (session !== 'daily') resetTimer();
+
+    document.getElementById('homepage').style.display = 'none';
+    document.getElementById('sticky-timer').style.display = 'flex';
+    document.getElementById('page-header').style.display = 'block';
+    document.getElementById('workout-content').style.display = 'block';
+    window.scrollTo(0, 0);
+
+    const isAM    = session === 'am';
+    const isPM    = session === 'pm';
+    const isBW    = session === 'bw';
+    const isDaily = session === 'daily';
+    const isArms  = session === 'arms';
+    const isGym   = session === 'gym';
+
+    ['am','pm','bw','daily','arms','gym'].forEach(s =>
+      document.getElementById('panel-' + s).classList.toggle('active', session === s)
+    );
+
+    const timer = document.getElementById('sticky-timer');
+    timer.className = 'sticky-timer';
+    if (isPM)    timer.classList.add('session-b');
+    if (isBW)    timer.classList.add('session-c');
+    if (isDaily) timer.classList.add('session-d');
+    if (isArms)  timer.classList.add('session-e');
+    if (isGym)   timer.classList.add('session-f');
+
+    const tag = isAM ? 'AM' : isPM ? 'PM' : isBW ? 'BW' : isDaily ? '10' : isArms ? 'ARMS' : 'GYM';
+    document.getElementById('timer-session-tag').textContent = tag;
+
+    const header = document.getElementById('page-header');
+    header.className = 'page-header';
+    if (isPM)    header.classList.add('pm-header');
+    if (isBW)    header.classList.add('bw-header');
+    if (isDaily) header.classList.add('daily-header');
+    if (isArms)  header.classList.add('arms-header');
+    if (isGym)   header.classList.add('gym-header');
+
+    const labels = {
+      am:    { label: '// MORNING SESSION //',      h1: 'PARK<br><span>DESTROYER</span>',  meta: '<span class="meta-pill">⏱ 60 MIN</span><span class="meta-pill">🔥 FULL BODY HYPERTROPHY</span><span class="meta-pill">🏋 BANDS + BODYWEIGHT</span><span class="meta-pill">NO MERCY</span>' },
+      pm:    { label: '// EVENING SESSION //',      h1: 'RECOVERY<br><span>PUMP</span>',    meta: '<span class="meta-pill">🌙 30 MIN</span><span class="meta-pill">💪 MODERATE INTENSITY</span><span class="meta-pill">🔁 BLOOD FLOW + VOLUME</span>' },
+      bw:    { label: '// BODYWEIGHT ONLY //',      h1: 'NO<br><span>EXCUSES</span>',       meta: '<span class="meta-pill">⚡ 30 MIN</span><span class="meta-pill">💀 MAX INTENSITY</span><span class="meta-pill">🏃 ZERO EQUIPMENT</span><span class="meta-pill">NOWHERE TO HIDE</span>' },
+      daily: { label: '// DAILY NON-NEGOTIABLE //', h1: 'THE<br><span>BLITZ</span>',        meta: '<span class="meta-pill">🔥 10 MIN</span><span class="meta-pill">⚡ ZERO BREAKS</span><span class="meta-pill">💀 EVERY SINGLE DAY</span>' },
+      arms:  { label: '// ARMS SPECIALIZATION //',  h1: 'ARM<br><span>DESTROYER</span>',   meta: '<span class="meta-pill">💪 45 MIN</span><span class="meta-pill">🎯 BICEPS + TRICEPS + FOREARMS</span><span class="meta-pill">🏋 BANDS + BODYWEIGHT</span>' },
+      gym:   { label: '// GYM SESSION //',          h1: 'GYM<br><span>DESTROYER</span>',   meta: '<span class="meta-pill">⏱ 90 MIN</span><span class="meta-pill">🔥 FULL BODY HYPERTROPHY</span><span class="meta-pill">🏋 DUMBBELLS + CABLES + BAR</span><span class="meta-pill">NO MERCY</span>' }
+    };
+
+    document.getElementById('header-label').textContent = labels[session].label;
+    document.getElementById('header-h1').innerHTML = labels[session].h1;
+    document.getElementById('header-meta').innerHTML = labels[session].meta;
+
+    const colors = { am: 'var(--red)', pm: 'var(--blue)', bw: 'var(--green)', daily: 'var(--fire)', arms: 'var(--purple)', gym: 'var(--teal)' };
+    document.getElementById('start-btn').style.background = colors[session];
+  }
+
+  function goHome() {
+    // stop timers
+    clearInterval(timerInterval);
+    running = false;
+    if (currentSession === 'daily') {
+      clearInterval(blitzInterval);
+      blitzRunning = false;
+    }
+    seconds = 0;
+    document.getElementById('start-btn').textContent = 'Start';
+
+    // show homepage, hide workout UI
+    document.getElementById('homepage').style.display = 'flex';
+    document.getElementById('sticky-timer').style.display = 'none';
+    document.getElementById('page-header').style.display = 'none';
+    document.getElementById('workout-content').style.display = 'none';
+
+    // hide all panels
+    ['am','pm','bw','daily','arms','gym'].forEach(s =>
+      document.getElementById('panel-' + s).classList.remove('active')
+    );
+
+    window.scrollTo(0, 0);
+  }
+
+  // ── BLITZ INTERVAL ENGINE ──
+  const blitzExercises = [
+    { name: 'Explosive Push-ups',     note: 'Chest to ground — explode off floor, hands leave the ground',     duration: 45 },
+    { name: 'Jump Squats',            note: 'Max height every rep — land silent, absorb deep into squat',       duration: 45 },
+    { name: 'Burpees',                note: 'Full extension at top, chest to floor — no half reps',             duration: 45 },
+    { name: 'Mountain Climbers',      note: 'Hips low and still — drive knees to chest as fast as possible',    duration: 45 },
+    { name: 'Jump Lunges',            note: 'Alternate legs mid-air — drive through front heel, land soft',     duration: 45 },
+    { name: 'Pike Push-ups',          note: 'Hips high, forehead to floor — control the descent',              duration: 45 },
+    { name: 'V-ups',                  note: 'Legs and torso meet at top — full compression every rep',          duration: 45 },
+    { name: 'Plank Shoulder Taps',    note: 'Hips perfectly still — tap opposite shoulder, zero rotation',     duration: 45 },
+    { name: 'Squat Hold Pulses',      note: '90° squat hold — pulse 2 inches up and down, thighs burning',     duration: 45 },
+    { name: '💀 DEATH ROUND',         note: 'Burpee → Push-up → Jump Squat → V-up. Cycle until time ends.',    duration: 45 },
+  ];
+
+  let blitzRunning = false;
+  let blitzInterval = null;
+  let blitzCurrentEx = 0;
+  let blitzSecondsLeft = blitzExercises[0].duration;
+  let blitzTotalElapsed = 0;
+
+  function buildQueue() {
+    const q = document.getElementById('exercise-queue');
+    if (!q) return;
+    q.innerHTML = '';
+    blitzExercises.forEach((ex, i) => {
+      const item = document.createElement('div');
+      item.className = 'queue-item' + (i === 0 ? ' active-ex' : '');
+      item.id = 'qi-' + i;
+      item.innerHTML = `<div class="queue-num">${String(i+1).padStart(2,'0')}</div><div class="queue-name">${ex.name}</div><div class="queue-duration">:${String(ex.duration).padStart(2,'0')}</div>`;
+      q.appendChild(item);
+    });
+  }
+
+  function updateBlitzDisplay() {
+    const ex = blitzExercises[blitzCurrentEx];
+    document.getElementById('interval-num').textContent = `EXERCISE ${blitzCurrentEx + 1} OF ${blitzExercises.length}`;
+    document.getElementById('interval-ex-name').textContent = ex.name;
+    document.getElementById('interval-ex-note').textContent = ex.note;
+    document.getElementById('interval-countdown').textContent = blitzSecondsLeft;
+    document.getElementById('interval-countdown').className = 'interval-countdown' + (blitzSecondsLeft <= 5 ? ' danger' : '');
+    document.getElementById('interval-type-tag').textContent = blitzRunning ? '▶ GO' : '⏸ PAUSED';
+    const pct = (blitzSecondsLeft / ex.duration) * 100;
+    document.getElementById('interval-fill').style.width = pct + '%';
+
+    // queue highlights
+    blitzExercises.forEach((_, i) => {
+      const el = document.getElementById('qi-' + i);
+      if (!el) return;
+      el.className = 'queue-item' + (i === blitzCurrentEx ? ' active-ex' : i < blitzCurrentEx ? ' done-ex' : '');
+    });
+  }
+
+  function toggleBlitz() {
+    if (blitzCurrentEx >= blitzExercises.length) { resetBlitz(); return; }
+    if (blitzRunning) {
+      clearInterval(blitzInterval);
+      blitzRunning = false;
+      document.getElementById('blitz-start-btn').textContent = '▶ RESUME';
+      document.getElementById('interval-type-tag').textContent = '⏸ PAUSED';
+    } else {
+      blitzRunning = true;
+      document.getElementById('blitz-start-btn').textContent = '⏸ PAUSE';
+      blitzInterval = setInterval(() => {
+        blitzSecondsLeft--;
+        blitzTotalElapsed++;
+        // sync main timer display when on daily tab
+        if (currentSession === 'daily') {
+          seconds = blitzTotalElapsed;
+          updateTimerDisplay();
+          updateProgress();
+        }
+        if (blitzSecondsLeft <= 0) {
+          blitzCurrentEx++;
+          if (blitzCurrentEx >= blitzExercises.length) {
+            clearInterval(blitzInterval);
+            blitzRunning = false;
+            document.getElementById('interval-ex-name').textContent = '🏆 DONE. YOU SURVIVED.';
+            document.getElementById('interval-ex-note').textContent = 'Rest. You earned it.';
+            document.getElementById('interval-countdown').textContent = '00';
+            document.getElementById('interval-type-tag').textContent = '✔ SESSION COMPLETE';
+            document.getElementById('blitz-start-btn').textContent = '↺ AGAIN';
+            document.getElementById('interval-fill').style.width = '0%';
+            blitzExercises.forEach((_, i) => {
+              const el = document.getElementById('qi-' + i);
+              if (el) el.className = 'queue-item done-ex';
+            });
+            return;
+          }
+          blitzSecondsLeft = blitzExercises[blitzCurrentEx].duration;
+        }
+        updateBlitzDisplay();
+      }, 1000);
+    }
+  }
+
+  function resetBlitz() {
+    clearInterval(blitzInterval);
+    blitzRunning = false;
+    blitzCurrentEx = 0;
+    blitzTotalElapsed = 0;
+    blitzSecondsLeft = blitzExercises[0].duration;
+    document.getElementById('blitz-start-btn').textContent = '▶ START';
+    document.getElementById('interval-type-tag').textContent = '▶ PRESS START TO BEGIN';
+    if (currentSession === 'daily') { seconds = 0; updateTimerDisplay(); updateProgress(); }
+    buildQueue();
+    updateBlitzDisplay();
+  }
+
+  // ── MAIN TIMER ──
+  function toggleTimer() {
+    if (currentSession === 'daily') { toggleBlitz(); return; }
+    if (running) {
+      clearInterval(timerInterval);
+      running = false;
+      document.getElementById('start-btn').textContent = 'Resume';
+    } else {
+      timerInterval = setInterval(() => {
+        seconds++;
+        updateTimerDisplay();
+        updateProgress();
+      }, 1000);
+      running = true;
+      document.getElementById('start-btn').textContent = 'Pause';
+    }
+  }
+
+  function resetTimer() {
+    if (currentSession === 'daily') { resetBlitz(); return; }
+    clearInterval(timerInterval);
+    running = false;
+    seconds = 0;
+    document.getElementById('start-btn').textContent = 'Start';
+    updateTimerDisplay();
+    updateProgress();
+  }
+
+  function updateTimerDisplay() {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }
+
+  function updateProgress() {
+    const pct = Math.min(100, Math.round((seconds / totalSecs[currentSession]) * 100));
+    document.getElementById('progress-bar-mini').style.width = pct + '%';
+  }
+
+  function toggleDone(id) {
+    const block = document.getElementById(id);
+    block.classList.toggle('done');
+    block.querySelector('.ss-check').textContent = block.classList.contains('done') ? '✔' : '☐';
+  }
+
+  // Init blitz queue on load
+  buildQueue();
+  updateBlitzDisplay();
+</script>
+</body>
+</html>
