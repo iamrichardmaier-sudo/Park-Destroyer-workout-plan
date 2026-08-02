@@ -34,7 +34,9 @@
     color: var(--text);
     font-family: 'Barlow Condensed', sans-serif;
     min-height: 100vh;
-    padding: 0 0 80px 0;
+    /* Bottom clearance belongs to whichever view is showing: the homepage
+       reserves space for the nav, the workout view for its own scroll. */
+    padding: 0;
     overflow-x: hidden;
   }
 
@@ -98,6 +100,158 @@
     margin-top: 12px;
     letter-spacing: 1px;
     line-height: 1.5;
+  }
+
+  /* ══ MOBILE SHELL ══
+     Three tabs, each sized to sit inside one phone screen, with the nav
+     pinned in thumb reach at the bottom. */
+
+  #homepage {
+    min-height: 100vh;
+    min-height: 100dvh;          /* ignores mobile browser chrome */
+    padding-bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: tabIn 0.22s ease-out; }
+
+  @keyframes tabIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 250;
+    display: flex;
+    background: rgba(13,13,13,0.97);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid #242424;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 9px 4px 10px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    position: relative;
+    color: #5f5f5f;
+    transition: color 0.18s;
+  }
+
+  .nav-btn .n-icon { font-size: 19px; line-height: 1; filter: grayscale(1) opacity(0.55); transition: filter 0.18s; }
+  .nav-btn .n-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 8.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .nav-btn.active { color: var(--yellow); }
+  .nav-btn.active .n-icon { filter: none; }
+
+  .nav-btn.active::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 30px; height: 2px;
+    background: var(--yellow);
+    border-radius: 0 0 3px 3px;
+  }
+
+  /* Badge counter on the trophies tab when something is newly earned. */
+  .nav-dot {
+    position: absolute;
+    top: 6px;
+    margin-left: 17px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    display: none;
+  }
+
+  .nav-dot.show { display: block; }
+
+  /* ── COMPACT HERO ──
+     The old hero ate half a phone screen; this keeps the brand but hands
+     the space back to content. */
+  .home-hero {
+    padding: 18px 18px 30px;
+  }
+
+  .home-hero h1 {
+    font-size: clamp(30px, 8.5vw, 46px);
+  }
+
+  .home-hero-sub { display: none; }   /* replaced by the chip strip */
+
+  .hero-strip {
+    display: flex;
+    gap: 7px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hero-chip {
+    background: rgba(0,0,0,0.28);
+    border-radius: 20px;
+    padding: 5px 11px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .hero-chip b {
+    font-family: 'Black Ops One', cursive;
+    font-weight: normal;
+    color: var(--yellow);
+  }
+
+  /* XP progress lives in the header so it's visible from every tab. */
+  .hero-xp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .hero-xp-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(0,0,0,0.35);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .hero-xp-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--yellow);
+    border-radius: 4px;
+    transition: width 0.7s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .hero-xp-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.75);
+    white-space: nowrap;
+    letter-spacing: 0.5px;
   }
 
   /* ── LEVEL / RANK CARD ── */
@@ -461,6 +615,136 @@
     0%   { opacity: 0; transform: translateY(6px) scale(0.8); }
     22%  { opacity: 1; transform: translateY(-6px) scale(1.1); }
     100% { opacity: 0; transform: translateY(-42px) scale(1); }
+  }
+
+  /* ── PHONE FIT ──
+     Tightened so each tab lands inside one screen without scrolling on a
+     typical handset. Larger screens keep the roomier original spacing. */
+  @media (max-height: 820px), (max-width: 480px) {
+    /* The nav already reserves the bottom gutter — the global body padding
+       would stack a second one under every tab. */
+    body { padding-bottom: 0; }
+
+    /* Title collapses to one line, reclaiming ~65px on every tab. */
+    .home-hero { padding: 11px 16px 20px; }
+    .home-hero h1 { font-size: clamp(24px, 6.6vw, 34px); line-height: 1; }
+    .home-hero h1 br { display: none; }
+    .home-hero h1 span::before { content: ' '; }
+    .home-hero-label { font-size: 8.5px; margin-bottom: 4px; letter-spacing: 3px; }
+    .hero-strip { margin-top: 9px; gap: 6px; }
+    .hero-chip { padding: 4px 9px; font-size: 9px; }
+
+    .home-grid { padding: 10px 11px 0; gap: 6px; }
+    .workout-card { padding: 10px 13px; gap: 11px; }
+    .card-icon { font-size: 22px; min-width: 27px; }
+    .card-title { font-size: 16px; margin-bottom: 2px; }
+    /* One line of meta is enough to identify a session at a glance. Clip the
+       second line rather than removing the <br>, which would run the two
+       lines together mid-word. */
+    .card-meta {
+      font-size: 9.5px;
+      line-height: 1.3;
+      max-height: 1.3em;
+      overflow: hidden;
+    }
+
+    .dash { padding: 10px 11px 0; }
+    .level-card { padding: 11px; margin-bottom: 8px; }
+    .level-top { margin-bottom: 9px; gap: 10px; }
+    .level-badge { width: 40px; height: 40px; border-radius: 8px; }
+    .level-badge .lv-num { font-size: 17px; }
+    .level-rank { font-size: 16px; }
+    .level-xp-line { font-size: 9px; margin-top: 2px; }
+    .xp-track { height: 7px; }
+    .xp-next { font-size: 8px; margin-top: 4px; }
+
+    .quest { padding: 8px 12px; margin-bottom: 10px; }
+    .quest-icon { font-size: 20px; }
+    .quest-title { font-size: 12px; }
+    .quest-sub { font-size: 9px; margin-top: 1px; }
+
+    .stat-row { margin-bottom: 10px; gap: 6px; }
+    .stat-tile { padding: 9px 6px; border-top-width: 2px; }
+    .stat-value { font-size: 22px; }
+    .stat-label { font-size: 8px; margin-top: 4px; }
+    .stat-sub { font-size: 8px; margin-top: 2px; }
+
+    /* Fixed row height instead of square cells — a month grid of squares is
+       taller than a phone can spare. */
+    .cal-card { padding: 11px 10px 9px; margin-bottom: 8px; }
+    .cal-head { margin-bottom: 9px; }
+    .cal-month { font-size: 14px; }
+    .cal-nav button { width: 26px; height: 26px; font-size: 13px; }
+    .cal-grid { gap: 3px; }
+    .cal-cell { aspect-ratio: auto; height: 29px; font-size: 10px; border-radius: 4px; }
+    .cal-dow { font-size: 8px; padding-bottom: 2px; }
+    .cal-legend { margin-top: 8px; font-size: 8px; }
+    .cal-legend .swatch { width: 10px; height: 10px; }
+
+    .badge-grid { gap: 5px; margin-bottom: 10px; }
+    .badge { padding: 8px 3px 7px; border-radius: 7px; }
+    .badge .b-icon { font-size: 19px; }
+    .badge .b-name { font-size: 7px; margin-top: 4px; }
+
+    .dash-section-label { margin-bottom: 7px; font-size: 9px; }
+    /* The month title already names this card. */
+    #tab-stats .dash-section-label { display: none; }
+
+    /* Level, rank and XP are all in the header on phones, so the card that
+       repeats them is pure duplication — and it's what pushed Stats over. */
+    .level-card { display: none; }
+    .hero-xp { margin-top: 8px; }
+
+    body { padding-bottom: 0; }
+  }
+
+  /* Short screens (SE through iPhone 14) need one more notch of tightening. */
+  @media (max-height: 700px) {
+    .home-hero { padding: 9px 14px 16px; }
+    .home-hero h1 { font-size: 22px; }
+    .home-hero-label { display: none; }
+    .hero-strip { margin-top: 7px; }
+    .hero-chip { padding: 3px 8px; font-size: 8.5px; }
+    .hero-xp { margin-top: 6px; }
+
+    .home-grid { padding: 5px 10px 0; gap: 5px; }
+    .dash { padding: 5px 10px 0; }
+    .workout-card { padding: 7px 11px; gap: 9px; border-left-width: 3px; }
+    .card-icon { font-size: 19px; min-width: 23px; }
+    .card-title { font-size: 14px; margin-bottom: 1px; }
+    .card-meta { font-size: 8.5px; }
+    .card-badge { font-size: 7px; padding: 2px 5px; }
+
+    .dash { padding: 8px 10px 0; }
+    .quest { padding: 7px 10px; margin-bottom: 8px; }
+    .stat-row { margin-bottom: 8px; }
+    .stat-tile { padding: 7px 4px; }
+    .stat-value { font-size: 19px; }
+    .cal-card { padding: 9px 9px 8px; }
+    .cal-cell { height: 25px; font-size: 9px; }
+    .cal-head { margin-bottom: 7px; }
+    .cal-month { font-size: 13px; }
+    .badge { padding: 6px 3px 6px; }
+    .badge .b-icon { font-size: 17px; }
+  }
+
+  /* Smallest phones (SE): drop the second meta line and tighten rows rather
+     than going multi-column — stacking made each card taller, not shorter. */
+  @media (max-height: 600px) {
+    .home-grid { padding: 6px 9px 0; gap: 4px; }
+    .workout-card { padding: 6px 10px; gap: 8px; }
+    .card-icon { font-size: 17px; min-width: 21px; }
+    .card-title { font-size: 13px; margin-bottom: 0; }
+    .card-meta { font-size: 8px; }
+    .quest { padding: 6px 9px; margin-bottom: 7px; }
+    .cal-cell { height: 23px; font-size: 8.5px; }
+    .stat-value { font-size: 17px; }
+    .stat-tile { padding: 6px 4px; }
+  }
+
+  /* Roomier screens keep the full card and don't need the header bar. */
+  @media (min-width: 481px) and (min-height: 821px) {
+    .hero-xp { display: none; }
   }
 
   /* ── DASHBOARD ── */
@@ -1189,7 +1473,7 @@
 
   /* ── CONTENT ── */
   .content {
-    padding: 0 14px;
+    padding: 0 14px 80px;
     position: relative;
     z-index: 1;
     max-width: 640px;
@@ -1439,15 +1723,83 @@
   <div class="home-hero">
     <div class="home-hero-label">// YOUR TRAINING HUB //</div>
     <h1>PARK<br><span>DESTROYER</span></h1>
-    <div class="home-hero-sub" id="hero-sub">Select a workout to begin.<br>Timer starts automatically when you're in.</div>
+    <div class="home-hero-sub" id="hero-sub"></div>
+    <div class="hero-strip">
+      <div class="hero-chip">LVL <b id="chip-lvl">1</b> <span id="chip-rank">ROOKIE</span></div>
+      <div class="hero-chip">🔥 <b id="chip-streak">0</b> DAY STREAK</div>
+    </div>
+    <div class="hero-xp">
+      <div class="hero-xp-track"><div class="hero-xp-fill" id="hero-xp-fill"></div></div>
+      <div class="hero-xp-text" id="hero-xp-text">0 / 200 XP</div>
+    </div>
   </div>
 
-  <div class="sync-bar">
-    <span class="sync-dot local" id="sync-dot"></span>
-    <span id="sync-text">Loading your history…</span>
+  <!-- ══ TAB: TRAIN ══ -->
+  <div class="tab-panel active" id="tab-train">
+    <div class="home-grid">
+
+    <div class="workout-card card-am" onclick="goToSession('am')">
+      <div class="card-icon">🔥</div>
+      <div class="card-body">
+        <div class="card-title">PARK DESTROYER</div>
+        <div class="card-meta">60 MIN · FULL BODY HYPERTROPHY<br>BANDS + BODYWEIGHT · NO MERCY</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-pm" onclick="goToSession('pm')">
+      <div class="card-icon">🌙</div>
+      <div class="card-body">
+        <div class="card-title">RECOVERY PUMP</div>
+        <div class="card-meta">30 MIN · MODERATE INTENSITY<br>BLOOD FLOW + VOLUME</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-bw" onclick="goToSession('bw')">
+      <div class="card-icon">⚡</div>
+      <div class="card-body">
+        <div class="card-title">NO EXCUSES</div>
+        <div class="card-meta">30 MIN · MAX INTENSITY<br>ZERO EQUIPMENT · ANYWHERE</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-arms" onclick="goToSession('arms')">
+      <div class="card-icon">💪</div>
+      <div class="card-body">
+        <div class="card-title">ARM DESTROYER</div>
+        <div class="card-meta">45 MIN · BICEPS + TRICEPS + FOREARMS<br>BANDS + BODYWEIGHT</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-daily" onclick="goToSession('daily')">
+      <div class="card-badge badge-daily">Every Day</div>
+      <div class="card-icon">💀</div>
+      <div class="card-body">
+        <div class="card-title">THE BLITZ</div>
+        <div class="card-meta">10 MIN · ZERO BREAKS · AUTO TIMER<br>DAILY NON-NEGOTIABLE</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-gym" onclick="goToSession('gym')">
+      <div class="card-icon">🏋️</div>
+      <div class="card-body">
+        <div class="card-title">GYM DESTROYER</div>
+        <div class="card-meta">90 MIN · FULL BODY HYPERTROPHY<br>DUMBBELLS + CABLES + PULL-UP BAR</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+  </div>
   </div>
 
-  <div class="dash">
+  <!-- ══ TAB: STATS ══ -->
+  <div class="tab-panel" id="tab-stats">
+    <div class="dash">
+
 
     <div class="level-card">
       <div class="level-top">
@@ -1510,71 +1862,34 @@
         <span>3+ SESSIONS</span>
       </div>
     </div>
+    </div>
+  </div>
 
-    <div class="dash-section-label">// Trophies · <span id="badge-count">0/14</span> //</div>
+  <!-- ══ TAB: TROPHIES ══ -->
+  <div class="tab-panel" id="tab-trophies">
+    <div class="dash">
+<div class="dash-section-label">// Trophies · <span id="badge-count">0/14</span> //</div>
     <div class="badge-grid" id="badge-grid"></div>
-
-    <div class="dash-section-label">// Start Training //</div>
+      <div class="sync-bar">
+    <span class="sync-dot local" id="sync-dot"></span>
+    <span id="sync-text">Loading your history…</span>
+  </div>
+    </div>
   </div>
 
-  <div class="home-grid">
-
-    <div class="workout-card card-am" onclick="goToSession('am')">
-      <div class="card-icon">🔥</div>
-      <div class="card-body">
-        <div class="card-title">PARK DESTROYER</div>
-        <div class="card-meta">60 MIN · FULL BODY HYPERTROPHY<br>BANDS + BODYWEIGHT · NO MERCY</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </div>
-
-    <div class="workout-card card-pm" onclick="goToSession('pm')">
-      <div class="card-icon">🌙</div>
-      <div class="card-body">
-        <div class="card-title">RECOVERY PUMP</div>
-        <div class="card-meta">30 MIN · MODERATE INTENSITY<br>BLOOD FLOW + VOLUME</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </div>
-
-    <div class="workout-card card-bw" onclick="goToSession('bw')">
-      <div class="card-icon">⚡</div>
-      <div class="card-body">
-        <div class="card-title">NO EXCUSES</div>
-        <div class="card-meta">30 MIN · MAX INTENSITY<br>ZERO EQUIPMENT · ANYWHERE</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </div>
-
-    <div class="workout-card card-arms" onclick="goToSession('arms')">
-      <div class="card-icon">💪</div>
-      <div class="card-body">
-        <div class="card-title">ARM DESTROYER</div>
-        <div class="card-meta">45 MIN · BICEPS + TRICEPS + FOREARMS<br>BANDS + BODYWEIGHT</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </div>
-
-    <div class="workout-card card-daily" onclick="goToSession('daily')">
-      <div class="card-badge badge-daily">Every Day</div>
-      <div class="card-icon">💀</div>
-      <div class="card-body">
-        <div class="card-title">THE BLITZ</div>
-        <div class="card-meta">10 MIN · ZERO BREAKS · AUTO TIMER<br>DAILY NON-NEGOTIABLE</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </div>
-
-    <div class="workout-card card-gym" onclick="goToSession('gym')">
-      <div class="card-icon">🏋️</div>
-      <div class="card-body">
-        <div class="card-title">GYM DESTROYER</div>
-        <div class="card-meta">90 MIN · FULL BODY HYPERTROPHY<br>DUMBBELLS + CABLES + PULL-UP BAR</div>
-      </div>
-      <div class="card-arrow">›</div>
-    </div>
-
-  </div>
+  <!-- ══ BOTTOM NAV ══ -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" id="nav-train" onclick="switchTab('train')">
+      <span class="n-icon">🏋️</span><span class="n-label">Train</span>
+    </button>
+    <button class="nav-btn" id="nav-stats" onclick="switchTab('stats')">
+      <span class="n-icon">📊</span><span class="n-label">Stats</span>
+    </button>
+    <button class="nav-btn" id="nav-trophies" onclick="switchTab('trophies')">
+      <span class="n-icon">🏆</span><span class="n-label">Trophies</span>
+      <span class="nav-dot" id="nav-dot"></span>
+    </button>
+  </nav>
 </div>
 
 <!-- ══ STICKY RIBBON (hidden until in workout) ══ -->
@@ -3479,12 +3794,7 @@
     document.getElementById('stat-time').innerHTML =
       dur.value + '<span class="stat-unit">' + dur.unit + '</span>';
 
-    const sub = document.getElementById('hero-sub');
-    if (sub) {
-      sub.innerHTML = current > 0
-        ? '🔥 ' + current + ' day streak — keep it alive.<br>Hit ✔ DONE to bank a session.'
-        : 'Select a workout to begin.<br>Hit ✔ DONE to start your streak.';
-    }
+    document.getElementById('chip-streak').textContent = current;
 
     renderCalendar();
     renderGame();
@@ -3622,7 +3932,7 @@
   }
 
   const Meta = {
-    data: { seenBadges: [], perfects: 0 },
+    data: { seenBadges: [], perfects: 0, unseenTrophies: 0 },
     load() {
       try {
         const raw = JSON.parse(localStorage.getItem(META_KEY));
@@ -3688,6 +3998,11 @@
     Meta.data.seenBadges = earned;
     Meta.save();
 
+    if (celebrate && fresh.length && activeTab !== 'trophies') {
+      Meta.data.unseenTrophies = (Meta.data.unseenTrophies || 0) + fresh.length;
+      Meta.save();
+    }
+
     if (celebrate) {
       fresh.forEach(id => {
         const b = BADGES.find(x => x.id === id);
@@ -3710,9 +4025,15 @@
 
     document.getElementById('lv-num').textContent = level;
     document.getElementById('lv-rank').textContent = rankFor(level);
+    document.getElementById('chip-lvl').textContent = level;
+    document.getElementById('chip-rank').textContent = rankFor(level);
+    updateNavDot();
     document.getElementById('lv-xp').textContent = xp.toLocaleString() + ' XP TOTAL';
     document.getElementById('lv-fill').style.width = Math.min(100, (into / need) * 100) + '%';
     document.getElementById('lv-next').textContent = (need - into) + ' XP to Level ' + (level + 1);
+
+    document.getElementById('hero-xp-fill').style.width = Math.min(100, (into / need) * 100) + '%';
+    document.getElementById('hero-xp-text').textContent = into + ' / ' + need + ' XP';
 
     const earned = new Set(earnedBadges());
     document.getElementById('badge-count').textContent = earned.size + '/' + BADGES.length;
@@ -3757,6 +4078,29 @@
     document.getElementById('quest-sub').textContent = done ? 'Mission complete — nice work.' : q.sub;
     document.getElementById('quest-check').textContent = done ? '✔' : '○';
     document.getElementById('quest').className = 'quest' + (done ? ' done' : '');
+  }
+
+  // ── Tabs ──
+  let activeTab = 'train';
+
+  function switchTab(name) {
+    activeTab = name;
+    ['train', 'stats', 'trophies'].forEach(t => {
+      document.getElementById('tab-' + t).classList.toggle('active', t === name);
+      document.getElementById('nav-' + t).classList.toggle('active', t === name);
+    });
+    if (name === 'trophies') {
+      Meta.data.unseenTrophies = 0;
+      Meta.save();
+      updateNavDot();
+    }
+    buzz(8);
+    window.scrollTo(0, 0);
+  }
+
+  function updateNavDot() {
+    document.getElementById('nav-dot')
+      .classList.toggle('show', (Meta.data.unseenTrophies || 0) > 0);
   }
 
   // ── In-workout block progress ──
