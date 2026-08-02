@@ -6,19 +6,46 @@ Gym Destroyer).
 
 ## The shareable link
 
-The app is served from `index.html` at the repository root, so GitHub Pages
-publishes it at:
-
-```
-https://iamrichardmaier-sudo.github.io/Park-Destroyer-workout-plan/
-```
-
-To switch Pages on: **Settings → Pages → Source: Deploy from a branch →
-branch `main`, folder `/ (root)` → Save.**
+Everything is served from `index.html` at the repository root — a single static
+file with no build step, so any static host works. The site is deployed on
+Netlify, which picks up `index.html` automatically and redeploys on every push
+to `main`. GitHub Pages works too if you ever want a fallback
+(**Settings → Pages → branch `main`, folder `/ (root)`**).
 
 `park-workout.html` is the original filename kept as an identical copy so older
 links keep working. Edit `index.html` and copy it across, or drop the old file
 once nobody is using that link.
+
+## The game
+
+The app is built around a completion loop: finish a session → earn XP → level
+up → unlock trophies → protect your streak.
+
+**XP and levels.** Every banked session pays out `minutes × 2` plus a bonus for
+how hard the session is (Gym 60, Park Destroyer 40, Arms 30, No Excuses 25,
+Recovery 20, Blitz 15). Each level costs 28% more than the last, and rank
+titles climb Rookie → Grinder → Warrior → Beast → Savage → Destroyer → Legend →
+Immortal.
+
+XP is *derived* from the sessions already stored rather than saved as its own
+number, so it recomputes identically on any device and can never drift out of
+sync with your actual history.
+
+**Trophies.** 14 unlockables covering firsts, streaks, volume, variety and
+timing. Locked ones still show their name so you know what to chase — tap any
+trophy to see how it's earned. Each one celebrates exactly once: the app
+remembers which have been shown, so history syncing in from another device
+backfills quietly instead of replaying twenty popups.
+
+**Daily mission.** One rotating goal per day, chosen from the date so it's
+stable all day and changes tomorrow.
+
+**In-workout.** A progress bar tracks blocks ticked off, the DONE button starts
+pulsing once everything is checked, and finishing every block earns the
+Perfectionist trophy. Ticking a block pops a `+XP` and a haptic buzz on phones
+that support it. Completing a session fires confetti and a summary card.
+
+The workout content itself — every exercise, set, rep and note — is unchanged.
 
 ## Tracking and streaks
 
@@ -65,7 +92,12 @@ To turn it on:
    Both values are meant to be public. Row level security is what protects the
    data, not the secrecy of the anon key — never put the `service_role` key here.
 
-5. Copy `index.html` over `park-workout.html` and push.
+5. Copy `index.html` over `park-workout.html` and push. Netlify redeploys on
+   its own.
+
+Trophy progress and the per-session block checklist live in `localStorage`
+only — they're cosmetic state rebuilt from your session history, so they don't
+need a table of their own.
 
 A dot under the header reports the current state: green "Synced to your
 account", yellow "Saved on this device", or red if the cloud is unreachable.
