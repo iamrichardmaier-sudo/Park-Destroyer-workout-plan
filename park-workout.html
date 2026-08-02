@@ -100,6 +100,280 @@
     line-height: 1.5;
   }
 
+  /* ── DASHBOARD ── */
+  .dash {
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px 14px 0;
+  }
+
+  .dash-section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* Hero numbers, not charts — three single values with no plot. */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .stat-tile {
+    background: var(--mid);
+    border-radius: 8px;
+    padding: 14px 10px;
+    text-align: center;
+    border-top: 3px solid var(--light);
+  }
+
+  .stat-tile.is-streak { border-top-color: var(--fire); }
+  .stat-tile.is-total  { border-top-color: var(--blue); }
+  .stat-tile.is-time   { border-top-color: var(--green); }
+
+  .stat-value {
+    font-family: 'Black Ops One', cursive;
+    font-size: 30px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .stat-unit {
+    font-family: 'Black Ops One', cursive;
+    font-size: 14px;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  .stat-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: #666;
+    margin-top: 3px;
+  }
+
+  /* ── STREAK CALENDAR ── */
+  .cal-card {
+    background: var(--mid);
+    border-radius: 8px;
+    padding: 16px 14px 14px;
+    margin-bottom: 24px;
+  }
+
+  .cal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .cal-month {
+    font-family: 'Black Ops One', cursive;
+    font-size: 17px;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  .cal-nav { display: flex; gap: 6px; }
+
+  .cal-nav button {
+    background: var(--light);
+    border: none;
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px;
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cal-nav button:disabled { opacity: 0.3; cursor: default; }
+  .cal-nav button:active:not(:disabled) { background: #3a3a3a; }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  .cal-dow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: #666;
+    text-align: center;
+    padding-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .cal-cell {
+    aspect-ratio: 1;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: #5a5a5a;
+    background: var(--dark);
+    position: relative;
+    cursor: default;
+  }
+
+  .cal-cell.empty { background: transparent; }
+
+  /* Sequential ramp — one hue, dark to bright, stepped by session count. */
+  .cal-cell.lvl-1 { background: #7C2D12; color: #F5D0BC; }
+  .cal-cell.lvl-2 { background: #C2410C; color: #FFE8D9; }
+  .cal-cell.lvl-3 { background: var(--fire); color: #2A1000; font-weight: 700; }
+
+  .cal-cell.today {
+    box-shadow: inset 0 0 0 2px var(--yellow);
+    color: var(--yellow);
+  }
+
+  .cal-cell.today.lvl-1,
+  .cal-cell.today.lvl-2,
+  .cal-cell.today.lvl-3 { color: #fff; }
+
+  .cal-cell.has-data { cursor: pointer; }
+
+  .cal-legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: #666;
+    letter-spacing: 0.5px;
+  }
+
+  .cal-legend .swatch {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  .cal-legend .sw-0 { background: var(--dark); }
+  .cal-legend .sw-1 { background: #7C2D12; }
+  .cal-legend .sw-2 { background: #C2410C; }
+  .cal-legend .sw-3 { background: var(--fire); }
+
+  /* Tooltip on hover/tap of a day cell. */
+  .cal-tip {
+    position: fixed;
+    z-index: 200;
+    background: #000;
+    border: 1px solid var(--light);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text);
+    line-height: 1.5;
+    pointer-events: none;
+    display: none;
+    max-width: 200px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  }
+
+  .cal-tip .tip-date {
+    color: var(--yellow);
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  /* ── SYNC STATUS ── */
+  .sync-bar {
+    max-width: 640px;
+    margin: 0 auto 14px;
+    padding: 0 14px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: #666;
+    text-transform: uppercase;
+  }
+
+  .sync-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .sync-dot.cloud { background: var(--green); }
+  .sync-dot.local { background: var(--yellow); }
+  .sync-dot.error { background: var(--red); }
+
+  /* ── COMPLETE BUTTON ── */
+  .complete-btn {
+    background: var(--green);
+    color: #fff;
+    border: none;
+    font-family: 'Black Ops One', cursive;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+  }
+
+  .complete-btn:active { transform: scale(0.96); }
+
+  /* Confirmation toast after a session is banked. */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--green-dark);
+    color: #fff;
+    font-family: 'Black Ops One', cursive;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    padding: 13px 22px;
+    border-radius: 8px;
+    z-index: 300;
+    opacity: 0;
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none;
+    text-align: center;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.5);
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .toast .toast-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    opacity: 0.85;
+    margin-top: 4px;
+  }
+
   .home-grid {
     padding: 24px 14px 0;
     display: flex;
@@ -802,7 +1076,55 @@
   <div class="home-hero">
     <div class="home-hero-label">// YOUR TRAINING HUB //</div>
     <h1>PARK<br><span>DESTROYER</span></h1>
-    <div class="home-hero-sub">Select a workout to begin.<br>Timer starts automatically when you're in.</div>
+    <div class="home-hero-sub" id="hero-sub">Select a workout to begin.<br>Timer starts automatically when you're in.</div>
+  </div>
+
+  <div class="sync-bar">
+    <span class="sync-dot local" id="sync-dot"></span>
+    <span id="sync-text">Loading your history…</span>
+  </div>
+
+  <div class="dash">
+
+    <div class="stat-row">
+      <div class="stat-tile is-streak">
+        <div class="stat-value" id="stat-streak">0</div>
+        <div class="stat-label">Day Streak</div>
+        <div class="stat-sub" id="stat-streak-sub">Best 0</div>
+      </div>
+      <div class="stat-tile is-total">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Sessions</div>
+        <div class="stat-sub" id="stat-total-sub">0 this week</div>
+      </div>
+      <div class="stat-tile is-time">
+        <div class="stat-value" id="stat-time">0<span class="stat-unit">m</span></div>
+        <div class="stat-label">Trained</div>
+        <div class="stat-sub" id="stat-time-sub">All time</div>
+      </div>
+    </div>
+
+    <div class="dash-section-label">// Streak Calendar //</div>
+    <div class="cal-card">
+      <div class="cal-head">
+        <div class="cal-month" id="cal-month">—</div>
+        <div class="cal-nav">
+          <button id="cal-prev" onclick="calShift(-1)" aria-label="Previous month">‹</button>
+          <button id="cal-next" onclick="calShift(1)" aria-label="Next month">›</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <span>REST</span>
+        <span class="swatch sw-0"></span>
+        <span class="swatch sw-1"></span>
+        <span class="swatch sw-2"></span>
+        <span class="swatch sw-3"></span>
+        <span>3+ SESSIONS</span>
+      </div>
+    </div>
+
+    <div class="dash-section-label">// Start Training //</div>
   </div>
 
   <div class="home-grid">
@@ -874,8 +1196,12 @@
   <div class="timer-btns">
     <button class="timer-btn" id="start-btn" onclick="toggleTimer()">Start</button>
     <button class="timer-btn" id="reset-btn" onclick="resetTimer()">Reset</button>
+    <button class="complete-btn" id="complete-btn" onclick="completeSession()">✔ DONE</button>
   </div>
 </div>
+
+<div class="cal-tip" id="cal-tip"></div>
+<div class="toast" id="toast"></div>
 
 <!-- ══ PAGE HEADER (hidden until in workout) ══ -->
 <div class="page-header" id="page-header" style="display:none;">
@@ -2197,6 +2523,20 @@
 
 </div><!-- /content -->
 
+<!-- ══════════════════════════════════════════════════════════
+     SUPABASE CONFIG — paste your project's values here.
+     Leave them blank and the app still works, saving history
+     to this device only. Both values are safe to publish:
+     row level security keeps every user's data private.
+═══════════════════════════════════════════════════════════ -->
+<script>
+  window.PD_CONFIG = {
+    SUPABASE_URL: '',
+    SUPABASE_ANON_KEY: ''
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
   let timerInterval = null;
   let seconds = 0;
@@ -2284,6 +2624,7 @@
       document.getElementById('panel-' + s).classList.remove('active')
     );
 
+    renderDashboard();
     window.scrollTo(0, 0);
   }
 
@@ -2373,6 +2714,11 @@
               const el = document.getElementById('qi-' + i);
               if (el) el.className = 'queue-item done-ex';
             });
+            // Running the full circuit is the completion signal — bank it
+            // automatically rather than making them tap DONE as well.
+            Store.add('daily', blitzTotalElapsed);
+            const s = computeStreaks(new Set(Object.keys(Store.byDate()))).current;
+            showToast('BLITZ COMPLETE 🔥', s + ' day streak');
             return;
           }
           blitzSecondsLeft = blitzExercises[blitzCurrentEx].duration;
@@ -2443,6 +2789,379 @@
   // Init blitz queue on load
   buildQueue();
   updateBlitzDisplay();
+
+  /* ═══════════════════════════════════════════════════════
+     HISTORY, STREAKS & DASHBOARD
+  ═══════════════════════════════════════════════════════ */
+
+  const LS_KEY = 'pd_logs_v1';
+
+  const SESSION_LABELS = {
+    am:    'Park Destroyer',
+    pm:    'Recovery Pump',
+    bw:    'No Excuses',
+    daily: 'The Blitz',
+    arms:  'Arm Destroyer',
+    gym:   'Gym Destroyer'
+  };
+
+  // ── Local-date helpers ──
+  // Streaks are counted on the user's own calendar, so every date is
+  // formatted from local getters rather than toISOString (which is UTC and
+  // would roll the day over at the wrong moment for most timezones).
+  function localDateStr(d = new Date()) {
+    return d.getFullYear() + '-' +
+           String(d.getMonth() + 1).padStart(2, '0') + '-' +
+           String(d.getDate()).padStart(2, '0');
+  }
+
+  function parseDate(s) {
+    const [y, m, d] = s.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  function addDays(s, n) {
+    const d = parseDate(s);
+    d.setDate(d.getDate() + n);
+    return localDateStr(d);
+  }
+
+  function dayDiff(a, b) {
+    return Math.round((parseDate(b) - parseDate(a)) / 86400000);
+  }
+
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+  // ── Store ──
+  // localStorage is always the source of truth for rendering, so the app is
+  // instant and works offline. Supabase, when configured, is a sync target
+  // on top of it.
+  const Store = {
+    logs: [],
+    mode: 'local',   // 'local' | 'cloud' | 'error'
+    client: null,
+    userId: null,
+
+    loadLocal() {
+      try {
+        this.logs = JSON.parse(localStorage.getItem(LS_KEY)) || [];
+      } catch (e) {
+        this.logs = [];
+      }
+    },
+
+    saveLocal() {
+      try {
+        localStorage.setItem(LS_KEY, JSON.stringify(this.logs));
+      } catch (e) { /* private mode / quota — in-memory for this visit */ }
+    },
+
+    async init() {
+      this.loadLocal();
+      renderDashboard();
+
+      const cfg = window.PD_CONFIG || {};
+      if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY || !window.supabase) {
+        setSyncStatus('local', 'Saved on this device');
+        return;
+      }
+
+      try {
+        this.client = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+
+        // An anonymous account is created once per device and then reused, so
+        // history survives reloads with nothing for the user to sign up for.
+        let { data: { session } } = await this.client.auth.getSession();
+        if (!session) {
+          const { data, error } = await this.client.auth.signInAnonymously();
+          if (error) throw error;
+          session = data.session;
+        }
+        this.userId = session.user.id;
+
+        await this.pull();
+        await this.pushPending();
+
+        this.mode = 'cloud';
+        setSyncStatus('cloud', 'Synced to your account');
+      } catch (e) {
+        console.warn('[PD] Cloud sync unavailable:', e.message);
+        this.mode = 'error';
+        setSyncStatus('error', 'Offline — saved on this device');
+      }
+      renderDashboard();
+    },
+
+    async pull() {
+      const { data, error } = await this.client
+        .from('workout_sessions')
+        .select('client_id, session_type, duration_seconds, local_date, completed_at')
+        .order('local_date', { ascending: false });
+      if (error) throw error;
+
+      const seen = new Set(this.logs.map(l => l.client_id));
+      (data || []).forEach(row => {
+        if (!seen.has(row.client_id)) {
+          this.logs.push({ ...row, synced: true });
+          seen.add(row.client_id);
+        } else {
+          const local = this.logs.find(l => l.client_id === row.client_id);
+          if (local) local.synced = true;
+        }
+      });
+      this.saveLocal();
+    },
+
+    async pushPending() {
+      const pending = this.logs.filter(l => !l.synced);
+      if (!pending.length) return;
+
+      const rows = pending.map(l => ({
+        user_id:          this.userId,
+        client_id:        l.client_id,
+        session_type:     l.session_type,
+        duration_seconds: l.duration_seconds,
+        local_date:       l.local_date,
+        completed_at:     l.completed_at
+      }));
+
+      // client_id is unique per user, so replaying a push is harmless.
+      const { error } = await this.client
+        .from('workout_sessions')
+        .upsert(rows, { onConflict: 'user_id,client_id' });
+      if (error) throw error;
+
+      pending.forEach(l => { l.synced = true; });
+      this.saveLocal();
+    },
+
+    async add(sessionType, durationSeconds) {
+      const entry = {
+        client_id:        uuid(),
+        session_type:     sessionType,
+        duration_seconds: Math.max(0, Math.round(durationSeconds || 0)),
+        local_date:       localDateStr(),
+        completed_at:     new Date().toISOString(),
+        synced:           false
+      };
+      this.logs.push(entry);
+      this.saveLocal();
+      renderDashboard();
+
+      if (this.mode === 'cloud') {
+        try {
+          await this.pushPending();
+        } catch (e) {
+          // Stays flagged unsynced and goes up on the next successful sync.
+          console.warn('[PD] Push failed, will retry later:', e.message);
+        }
+      }
+      return entry;
+    },
+
+    // date string -> array of that day's sessions
+    byDate() {
+      const map = {};
+      this.logs.forEach(l => (map[l.local_date] = map[l.local_date] || []).push(l));
+      return map;
+    }
+  };
+
+  function setSyncStatus(kind, text) {
+    const dot = document.getElementById('sync-dot');
+    const txt = document.getElementById('sync-text');
+    if (!dot || !txt) return;
+    dot.className = 'sync-dot ' + kind;
+    txt.textContent = text;
+  }
+
+  // ── Streaks ──
+  function computeStreaks(dateSet) {
+    if (!dateSet.size) return { current: 0, longest: 0 };
+
+    const sorted = [...dateSet].sort();
+    let longest = 1, run = 1;
+    for (let i = 1; i < sorted.length; i++) {
+      run = dayDiff(sorted[i - 1], sorted[i]) === 1 ? run + 1 : 1;
+      if (run > longest) longest = run;
+    }
+
+    // Today counts once trained, but an untrained today doesn't break the
+    // streak until it's actually over — so start counting back from yesterday.
+    let cursor = localDateStr();
+    if (!dateSet.has(cursor)) cursor = addDays(cursor, -1);
+    let current = 0;
+    while (dateSet.has(cursor)) {
+      current++;
+      cursor = addDays(cursor, -1);
+    }
+
+    return { current, longest: Math.max(longest, current) };
+  }
+
+  function formatDuration(totalSeconds) {
+    const mins = Math.round(totalSeconds / 60);
+    if (mins < 60) return { value: String(mins), unit: 'm' };
+    const hrs = Math.floor(mins / 60);
+    return { value: String(hrs), unit: 'h' };
+  }
+
+  // ── Dashboard ──
+  function renderDashboard() {
+    const byDate = Store.byDate();
+    const dateSet = new Set(Object.keys(byDate));
+    const { current, longest } = computeStreaks(dateSet);
+
+    document.getElementById('stat-streak').textContent = current;
+    document.getElementById('stat-streak-sub').textContent = 'Best ' + longest;
+
+    document.getElementById('stat-total').textContent = Store.logs.length;
+
+    // Rolling 7 days rather than a calendar week — no week-start ambiguity.
+    const cutoff = addDays(localDateStr(), -6);
+    const recent = Store.logs.filter(l => l.local_date >= cutoff).length;
+    document.getElementById('stat-total-sub').textContent = recent + ' in 7 days';
+
+    const totalSecs = Store.logs.reduce((sum, l) => sum + (l.duration_seconds || 0), 0);
+    const dur = formatDuration(totalSecs);
+    document.getElementById('stat-time').innerHTML =
+      dur.value + '<span class="stat-unit">' + dur.unit + '</span>';
+
+    const sub = document.getElementById('hero-sub');
+    if (sub) {
+      sub.innerHTML = current > 0
+        ? '🔥 ' + current + ' day streak — keep it alive.<br>Hit ✔ DONE to bank a session.'
+        : 'Select a workout to begin.<br>Hit ✔ DONE to start your streak.';
+    }
+
+    renderCalendar();
+  }
+
+  // ── Calendar ──
+  let calCursor = new Date();
+  calCursor = new Date(calCursor.getFullYear(), calCursor.getMonth(), 1);
+
+  function calShift(delta) {
+    calCursor = new Date(calCursor.getFullYear(), calCursor.getMonth() + delta, 1);
+    renderCalendar();
+  }
+
+  function renderCalendar() {
+    const grid = document.getElementById('cal-grid');
+    if (!grid) return;
+
+    const byDate = Store.byDate();
+    const year  = calCursor.getFullYear();
+    const month = calCursor.getMonth();
+    const today = localDateStr();
+
+    document.getElementById('cal-month').textContent =
+      calCursor.toLocaleDateString(undefined, { month: 'long', year: 'numeric' }).toUpperCase();
+
+    // No navigating into future months — there's nothing to show there.
+    const now = new Date();
+    const atCurrentMonth = year === now.getFullYear() && month === now.getMonth();
+    document.getElementById('cal-next').disabled = atCurrentMonth;
+
+    grid.innerHTML = '';
+    ['S','M','T','W','T','F','S'].forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-dow';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstWeekday = new Date(year, month, 1).getDay();
+    const daysInMonth  = new Date(year, month + 1, 0).getDate();
+
+    for (let i = 0; i < firstWeekday; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-cell empty';
+      grid.appendChild(el);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const ds = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+      const sessions = byDate[ds] || [];
+
+      const el = document.createElement('div');
+      let cls = 'cal-cell';
+      if (sessions.length === 1) cls += ' lvl-1';
+      else if (sessions.length === 2) cls += ' lvl-2';
+      else if (sessions.length >= 3) cls += ' lvl-3';
+      if (ds === today) cls += ' today';
+      if (sessions.length) cls += ' has-data';
+      el.className = cls;
+      el.textContent = day;
+
+      if (sessions.length) {
+        const mins = Math.round(sessions.reduce((s, l) => s + (l.duration_seconds || 0), 0) / 60);
+        const names = sessions.map(l => SESSION_LABELS[l.session_type] || l.session_type);
+        const label = parseDate(ds).toLocaleDateString(undefined,
+          { weekday: 'short', month: 'short', day: 'numeric' });
+        const tip = '<div class="tip-date">' + label.toUpperCase() + '</div>' +
+                    names.join('<br>') + '<br>' + mins + ' min total';
+        el.addEventListener('mouseenter', e => showTip(e, tip));
+        el.addEventListener('mousemove',  e => showTip(e, tip));
+        el.addEventListener('mouseleave', hideTip);
+        el.addEventListener('click',      e => { showTip(e, tip); setTimeout(hideTip, 2200); });
+      }
+
+      grid.appendChild(el);
+    }
+  }
+
+  function showTip(e, html) {
+    const tip = document.getElementById('cal-tip');
+    tip.innerHTML = html;
+    tip.style.display = 'block';
+    const r = tip.getBoundingClientRect();
+    let left = e.clientX - r.width / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - r.width - 8));
+    let top = e.clientY - r.height - 12;
+    if (top < 8) top = e.clientY + 16;
+    tip.style.left = left + 'px';
+    tip.style.top  = top + 'px';
+  }
+
+  function hideTip() {
+    document.getElementById('cal-tip').style.display = 'none';
+  }
+
+  // ── Completing a session ──
+  function completeSession() {
+    const elapsed = currentSession === 'daily' ? blitzTotalElapsed : seconds;
+
+    if (elapsed < 30) {
+      showToast('NOT SO FAST', 'Train at least 30 seconds first.');
+      return;
+    }
+
+    Store.add(currentSession, elapsed);
+
+    const mins = Math.max(1, Math.round(elapsed / 60));
+    const streak = computeStreaks(new Set(Object.keys(Store.byDate()))).current;
+    showToast('SESSION BANKED 🔥', mins + ' min · ' + streak + ' day streak');
+
+    goHome();
+  }
+
+  let toastTimer = null;
+  function showToast(title, sub) {
+    const t = document.getElementById('toast');
+    t.innerHTML = title + '<div class="toast-sub">' + sub + '</div>';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  Store.init();
 </script>
 </body>
 </html>
