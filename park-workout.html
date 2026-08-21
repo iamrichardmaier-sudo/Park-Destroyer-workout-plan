@@ -20,6 +20,8 @@
     --purple-dark: #6B21A8;
     --teal: #14B8A6;
     --teal-dark: #0F766E;
+    --pink: #EC4899;
+    --pink-dark: #9D174D;
     --dark: #0D0D0D;
     --mid: #1A1A1A;
     --light: #2A2A2A;
@@ -620,140 +622,7 @@
   /* ── PHONE FIT ──
      Tightened so each tab lands inside one screen without scrolling on a
      typical handset. Larger screens keep the roomier original spacing. */
-  @media (max-height: 820px), (max-width: 480px) {
-    /* The nav already reserves the bottom gutter — the global body padding
-       would stack a second one under every tab. */
-    body { padding-bottom: 0; }
 
-    /* Title collapses to one line, reclaiming ~65px on every tab. */
-    .home-hero { padding: 11px 16px 20px; }
-    .home-hero h1 { font-size: clamp(24px, 6.6vw, 34px); line-height: 1; }
-    .home-hero h1 br { display: none; }
-    .home-hero h1 span::before { content: ' '; }
-    .home-hero-label { font-size: 8.5px; margin-bottom: 4px; letter-spacing: 3px; }
-    .hero-strip { margin-top: 9px; gap: 6px; }
-    .hero-chip { padding: 4px 9px; font-size: 9px; }
-
-    .home-grid { padding: 10px 11px 0; gap: 6px; }
-    .workout-card { padding: 10px 13px; gap: 11px; }
-    .card-icon { font-size: 22px; min-width: 27px; }
-    .card-title { font-size: 16px; margin-bottom: 2px; }
-    /* One line of meta is enough to identify a session at a glance. Clip the
-       second line rather than removing the <br>, which would run the two
-       lines together mid-word. */
-    .card-meta {
-      font-size: 9.5px;
-      line-height: 1.3;
-      max-height: 1.3em;
-      overflow: hidden;
-    }
-
-    .dash { padding: 10px 11px 0; }
-    .level-card { padding: 11px; margin-bottom: 8px; }
-    .level-top { margin-bottom: 9px; gap: 10px; }
-    .level-badge { width: 40px; height: 40px; border-radius: 8px; }
-    .level-badge .lv-num { font-size: 17px; }
-    .level-rank { font-size: 16px; }
-    .level-xp-line { font-size: 9px; margin-top: 2px; }
-    .xp-track { height: 7px; }
-    .xp-next { font-size: 8px; margin-top: 4px; }
-
-    .quest { padding: 8px 12px; margin-bottom: 10px; }
-    .quest-icon { font-size: 20px; }
-    .quest-title { font-size: 12px; }
-    .quest-sub { font-size: 9px; margin-top: 1px; }
-
-    .stat-row { margin-bottom: 10px; gap: 6px; }
-    .stat-tile { padding: 9px 6px; border-top-width: 2px; }
-    .stat-value { font-size: 22px; }
-    .stat-label { font-size: 8px; margin-top: 4px; }
-    .stat-sub { font-size: 8px; margin-top: 2px; }
-
-    /* Fixed row height instead of square cells — a month grid of squares is
-       taller than a phone can spare. */
-    .cal-card { padding: 11px 10px 9px; margin-bottom: 8px; }
-    .cal-head { margin-bottom: 9px; }
-    .cal-month { font-size: 14px; }
-    .cal-nav button { width: 26px; height: 26px; font-size: 13px; }
-    .cal-grid { gap: 3px; }
-    .cal-cell { aspect-ratio: auto; height: 29px; font-size: 10px; border-radius: 4px; }
-    .cal-dow { font-size: 8px; padding-bottom: 2px; }
-    .cal-legend { margin-top: 8px; font-size: 8px; }
-    .cal-legend .swatch { width: 10px; height: 10px; }
-
-    .badge-grid { gap: 5px; margin-bottom: 10px; }
-    .badge { padding: 8px 3px 7px; border-radius: 7px; }
-    .badge .b-icon { font-size: 19px; }
-    .badge .b-name { font-size: 7px; margin-top: 4px; }
-
-    .dash-section-label { margin-bottom: 7px; font-size: 9px; }
-    /* The month title already names this card. */
-    #tab-stats .dash-section-label { display: none; }
-
-    /* Level, rank and XP are all in the header on phones, so the card that
-       repeats them is pure duplication — and it's what pushed Stats over. */
-    .level-card { display: none; }
-    .hero-xp { margin-top: 8px; }
-
-    body { padding-bottom: 0; }
-  }
-
-  /* Short screens (SE through iPhone 14) need one more notch of tightening. */
-  @media (max-height: 700px) {
-    .home-hero { padding: 9px 14px 16px; }
-    .home-hero h1 { font-size: 22px; }
-    .home-hero-label { display: none; }
-    .hero-strip { margin-top: 7px; }
-    .hero-chip { padding: 3px 8px; font-size: 8.5px; }
-    .hero-xp { margin-top: 6px; }
-
-    .home-grid { padding: 5px 10px 0; gap: 5px; }
-    .dash { padding: 5px 10px 0; }
-    .workout-card { padding: 7px 11px; gap: 9px; border-left-width: 3px; }
-    .card-icon { font-size: 19px; min-width: 23px; }
-    .card-title { font-size: 14px; margin-bottom: 1px; }
-    .card-meta { font-size: 8.5px; }
-    .card-badge { font-size: 7px; padding: 2px 5px; }
-
-    .dash { padding: 8px 10px 0; }
-    .quest { padding: 7px 10px; margin-bottom: 8px; }
-    .stat-row { margin-bottom: 8px; }
-    .stat-tile { padding: 7px 4px; }
-    .stat-value { font-size: 19px; }
-    .cal-card { padding: 9px 9px 8px; }
-    .cal-cell { height: 25px; font-size: 9px; }
-    .cal-head { margin-bottom: 7px; }
-    .cal-month { font-size: 13px; }
-    .badge { padding: 6px 3px 6px; }
-    .badge .b-icon { font-size: 17px; }
-  }
-
-  /* Smallest phones (SE): drop the second meta line and tighten rows rather
-     than going multi-column — stacking made each card taller, not shorter. */
-  @media (max-height: 600px) {
-    .home-grid { padding: 6px 9px 0; gap: 4px; }
-    .workout-card { padding: 6px 10px; gap: 8px; }
-    .card-icon { font-size: 17px; min-width: 21px; }
-    .card-title { font-size: 13px; margin-bottom: 0; }
-    .card-meta { font-size: 8px; }
-    .quest { padding: 6px 9px; margin-bottom: 7px; }
-    .cal-cell { height: 23px; font-size: 8.5px; }
-    .stat-value { font-size: 17px; }
-    .stat-tile { padding: 6px 4px; }
-  }
-
-  /* Roomier screens keep the full card and don't need the header bar. */
-  @media (min-width: 481px) and (min-height: 821px) {
-    .hero-xp { display: none; }
-  }
-
-  /* ── DASHBOARD ── */
-  .dash {
-    max-width: 640px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 20px 14px 0;
-  }
 
   .dash-section-label {
     font-family: 'Share Tech Mono', monospace;
@@ -1099,6 +968,7 @@
   }
 
   .badge-daily { background: rgba(255,107,26,0.15); color: var(--fire); border: 1px solid rgba(255,107,26,0.3); }
+  .badge-abs   { background: rgba(236,72,153,0.15); color: var(--pink); border: 1px solid rgba(236,72,153,0.3); }
 
   /* ── STICKY RIBBON (workout view) ── */
   .sticky-timer {
@@ -1121,6 +991,7 @@
   .sticky-timer.session-d { border-bottom-color: var(--fire); }
   .sticky-timer.session-e { border-bottom-color: var(--purple); }
   .sticky-timer.session-f { border-bottom-color: var(--teal); }
+  .sticky-timer.session-g { border-bottom-color: var(--pink); }
 
   .home-btn {
     font-family: 'Share Tech Mono', monospace;
@@ -1151,6 +1022,7 @@
   .session-d .timer-session-tag { color: var(--fire); }
   .session-e .timer-session-tag { color: var(--purple); }
   .session-f .timer-session-tag { color: var(--teal); }
+  .session-g .timer-session-tag { color: var(--pink); }
 
   #timer-display {
     font-family: 'Black Ops One', cursive;
@@ -1181,6 +1053,7 @@
   .session-d #progress-bar-mini { background: linear-gradient(90deg, var(--fire-dark), var(--fire)); }
   .session-e #progress-bar-mini { background: linear-gradient(90deg, var(--purple-dark), var(--purple)); }
   .session-f #progress-bar-mini { background: linear-gradient(90deg, var(--teal-dark), var(--teal)); }
+  .session-g #progress-bar-mini { background: linear-gradient(90deg, var(--pink-dark), var(--pink)); }
 
   .timer-btns { display: flex; gap: 5px; }
 
@@ -1216,6 +1089,7 @@
   .page-header.daily-header { background: #2d1400; }
   .page-header.arms-header  { background: #1a0d2e; }
   .page-header.gym-header   { background: #0a2420; }
+  .page-header.abs-header   { background: #2A0A1B; }
 
   .superset-block.gym-block { border-left-color: var(--teal); }
   .superset-block.gym-block .superset-label { background: var(--teal-dark); }
@@ -1228,6 +1102,7 @@
   .gym-notes .notes-list li::before { color: var(--teal); }
 
   .workout-card.card-gym { border-left-color: var(--teal); }
+  .workout-card.card-abs { border-left-color: var(--pink); }
 
   .superset-block.arms-block { border-left-color: var(--purple); }
   .superset-block.arms-block .superset-label { background: var(--purple-dark); }
@@ -1439,6 +1314,10 @@
   .notes-box.daily-notes { background: rgba(255,107,26,0.05); border: 1px solid rgba(255,107,26,0.2); }
   .daily-notes .notes-title { color: var(--fire); }
   .daily-notes .notes-list li::before { color: var(--fire); }
+
+  .notes-box.abs-notes { background: rgba(236,72,153,0.05); border: 1px solid rgba(236,72,153,0.2); }
+  .abs-notes .notes-title { color: var(--pink); }
+  .abs-notes .notes-list li::before { color: var(--pink); }
   .ss-connector.fire span { color: var(--fire); }
   .ss-connector.fire .ss-connector-line { background: var(--fire); }
 
@@ -1714,6 +1593,149 @@
   .bw-notes .notes-list li::before { color: var(--green); }
 
   .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 20px 0; }
+
+  /* ══ RESPONSIVE OVERRIDES ══
+     These must stay last: they share specificity with the base rules
+     above, so only source order lets them win. */
+
+@media (max-height: 820px), (max-width: 480px) {
+    /* The nav already reserves the bottom gutter — the global body padding
+       would stack a second one under every tab. */
+    body { padding-bottom: 0; }
+
+    /* Title collapses to one line, reclaiming ~65px on every tab. */
+    .home-hero { padding: 11px 16px 20px; }
+    .home-hero h1 { font-size: clamp(24px, 6.6vw, 34px); line-height: 1; }
+    .home-hero h1 br { display: none; }
+    .home-hero h1 span::before { content: ' '; }
+    .home-hero-label { font-size: 8.5px; margin-bottom: 4px; letter-spacing: 3px; }
+    .hero-strip { margin-top: 9px; gap: 6px; }
+    .hero-chip { padding: 4px 9px; font-size: 9px; }
+
+    .home-grid { padding: 10px 11px 0; gap: 6px; }
+    .workout-card { padding: 10px 13px; gap: 11px; }
+    .card-icon { font-size: 22px; min-width: 27px; }
+    .card-title { font-size: 16px; margin-bottom: 2px; }
+    /* One line of meta is enough to identify a session at a glance. Clip the
+       second line rather than removing the <br>, which would run the two
+       lines together mid-word. */
+    .card-meta {
+      font-size: 9.5px;
+      line-height: 1.3;
+      max-height: 1.3em;
+      overflow: hidden;
+    }
+
+    .dash { padding: 10px 11px 0; }
+    .level-card { padding: 11px; margin-bottom: 8px; }
+    .level-top { margin-bottom: 9px; gap: 10px; }
+    .level-badge { width: 40px; height: 40px; border-radius: 8px; }
+    .level-badge .lv-num { font-size: 17px; }
+    .level-rank { font-size: 16px; }
+    .level-xp-line { font-size: 9px; margin-top: 2px; }
+    .xp-track { height: 7px; }
+    .xp-next { font-size: 8px; margin-top: 4px; }
+
+    .quest { padding: 8px 12px; margin-bottom: 10px; }
+    .quest-icon { font-size: 20px; }
+    .quest-title { font-size: 12px; }
+    .quest-sub { font-size: 9px; margin-top: 1px; }
+
+    .stat-row { margin-bottom: 10px; gap: 6px; }
+    .stat-tile { padding: 9px 6px; border-top-width: 2px; }
+    .stat-value { font-size: 22px; }
+    .stat-label { font-size: 8px; margin-top: 4px; }
+    .stat-sub { font-size: 8px; margin-top: 2px; }
+
+    /* Fixed row height instead of square cells — a month grid of squares is
+       taller than a phone can spare. */
+    .cal-card { padding: 11px 10px 9px; margin-bottom: 8px; }
+    .cal-head { margin-bottom: 9px; }
+    .cal-month { font-size: 14px; }
+    .cal-nav button { width: 26px; height: 26px; font-size: 13px; }
+    .cal-grid { gap: 3px; }
+    .cal-cell { aspect-ratio: auto; height: 29px; font-size: 10px; border-radius: 4px; }
+    .cal-dow { font-size: 8px; padding-bottom: 2px; }
+    .cal-legend { margin-top: 8px; font-size: 8px; }
+    .cal-legend .swatch { width: 10px; height: 10px; }
+
+    .badge-grid { gap: 5px; margin-bottom: 10px; }
+    .badge { padding: 8px 3px 7px; border-radius: 7px; }
+    .badge .b-icon { font-size: 19px; }
+    .badge .b-name { font-size: 7px; margin-top: 4px; }
+
+    .dash-section-label { margin-bottom: 7px; font-size: 9px; }
+    /* The month title already names this card. */
+    #tab-stats .dash-section-label { display: none; }
+
+    /* Level, rank and XP are all in the header on phones, so the card that
+       repeats them is pure duplication — and it's what pushed Stats over. */
+    .level-card { display: none; }
+    .hero-xp { margin-top: 8px; }
+
+    body { padding-bottom: 0; }
+  }
+
+  /* Short screens (SE through iPhone 14) need one more notch of tightening. */
+  @media (max-height: 700px) {
+    .home-hero { padding: 9px 14px 16px; }
+    .home-hero h1 { font-size: 22px; }
+    .home-hero-label { display: none; }
+    .hero-strip { margin-top: 7px; }
+    .hero-chip { padding: 3px 8px; font-size: 8.5px; }
+    .hero-xp { margin-top: 6px; }
+
+    .home-hero { padding: 12px 16px 19px; }
+    .hero-strip { margin-top: 8px; }
+    .home-grid { padding: 10px 11px 0; gap: 7px; }
+    .dash { padding: 8px 11px 0; }
+    .workout-card { padding: 12px 13px; gap: 10px; }
+    .card-title { font-size: 16px; }
+    .card-icon { font-size: 19px; min-width: 23px; }
+    .card-title { font-size: 14px; margin-bottom: 1px; }
+    .card-meta { font-size: 8.5px; }
+    .card-badge { font-size: 7px; padding: 2px 5px; }
+
+    .dash { padding: 8px 10px 0; }
+    .quest { padding: 7px 10px; margin-bottom: 8px; }
+    .stat-row { margin-bottom: 8px; }
+    .stat-tile { padding: 7px 4px; }
+    .stat-value { font-size: 19px; }
+    .cal-card { padding: 9px 9px 8px; }
+    .cal-cell { height: 25px; font-size: 9px; }
+    .cal-head { margin-bottom: 7px; }
+    .cal-month { font-size: 13px; }
+    .badge { padding: 6px 3px 6px; }
+    .badge .b-icon { font-size: 17px; }
+  }
+
+  /* Smallest phones (SE): drop the second meta line and tighten rows rather
+     than going multi-column — stacking made each card taller, not shorter. */
+  @media (max-height: 600px) {
+    .home-grid { padding: 6px 9px 0; gap: 4px; }
+    .workout-card { padding: 7px 10px; gap: 8px; }
+    .card-icon { font-size: 18px; min-width: 22px; }
+    .card-title { font-size: 14px; margin-bottom: 0; }
+    .card-meta { font-size: 8.5px; }
+    .quest { padding: 6px 9px; margin-bottom: 7px; }
+    .cal-cell { height: 23px; font-size: 8.5px; }
+    .stat-value { font-size: 17px; }
+    .stat-tile { padding: 6px 4px; }
+  }
+
+  /* Roomier screens keep the full card and don't need the header bar. */
+  @media (min-width: 481px) and (min-height: 821px) {
+    .hero-xp { display: none; }
+  }
+
+  /* ── DASHBOARD ── */
+  .dash {
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px 14px 0;
+  }
+
 </style>
 </head>
 <body>
@@ -1780,6 +1802,16 @@
       <div class="card-body">
         <div class="card-title">THE BLITZ</div>
         <div class="card-meta">10 MIN · ZERO BREAKS · AUTO TIMER<br>DAILY NON-NEGOTIABLE</div>
+      </div>
+      <div class="card-arrow">›</div>
+    </div>
+
+    <div class="workout-card card-abs" onclick="goToSession('abs')">
+      <div class="card-badge badge-abs">Every Day</div>
+      <div class="card-icon">🎯</div>
+      <div class="card-body">
+        <div class="card-title">CORE SHREDDER</div>
+        <div class="card-meta">10 MIN · 7 EXERCISES × 2 ROUNDS<br>ZERO BREAKS · AUTO TIMER</div>
       </div>
       <div class="card-arrow">›</div>
     </div>
@@ -2649,6 +2681,55 @@
 </div><!-- /panel-daily -->
 
 <!-- ════════════════════════════
+     CORE SHREDDER — DAILY ABS
+════════════════════════════ -->
+<div class="session-panel" id="panel-abs">
+
+  <div class="blitz-intro">
+    <div class="blitz-intro-title">🎯 THE DAILY CORE CIRCUIT</div>
+    <div class="blitz-intro-text">
+      7 exercises. 5 minutes. Run it twice — 10 minutes total, zero breaks.<br>
+      Hit START and the timer drives you straight through. Your abs never get to rest.
+    </div>
+  </div>
+
+  <!-- LIVE INTERVAL DISPLAY -->
+  <div class="interval-display">
+    <div class="interval-num" id="interval-num-abs">ROUND 1 · EXERCISE 1 OF 7</div>
+    <div class="interval-exercise-name" id="interval-ex-name-abs">ASSISTED LEG RAISES</div>
+    <div class="interval-exercise-note" id="interval-ex-note-abs">Hands under your hips — lower slow, feet never touch the floor</div>
+    <div class="interval-countdown" id="interval-countdown-abs">60</div>
+    <div class="interval-type-tag" id="interval-type-tag-abs">▶ PRESS START TO BEGIN</div>
+    <div class="interval-progress-bar"><div id="interval-fill-abs"></div></div>
+    <div class="interval-controls">
+      <button class="interval-btn" id="blitz-start-btn-abs" onclick="toggleBlitz()">▶ START</button>
+      <button class="interval-btn" id="blitz-reset-btn-abs" onclick="resetBlitz()">Reset</button>
+    </div>
+  </div>
+
+  <!-- EXERCISE QUEUE -->
+  <div class="exercise-queue" id="exercise-queue-abs">
+    <!-- populated by JS -->
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="notes-box abs-notes">
+    <div class="notes-title">🎯 CORE CIRCUIT RULES</div>
+    <ul class="notes-list">
+      <li>Every day. Stack it onto any session, or run it on its own when you're short on time.</li>
+      <li>Zero breaks — the timer moves you automatically. The transition is the rest.</li>
+      <li>One circuit is 5 minutes: 60s · 30s · 60s · 60s · 30s · 30s · 30s. You run it twice.</li>
+      <li>Lower back stays pressed into the floor on every rep. If it arches, slow down or shorten the range.</li>
+      <li>Breathe out hard at the top of each crunch — don't hold your breath through the interval.</li>
+      <li>Circular crunches switch direction halfway. Keep the motion continuous, not jerky.</li>
+      <li>All bodyweight, no equipment. Floor space is the only requirement.</li>
+    </ul>
+  </div>
+
+</div><!-- /panel-abs -->
+
+<!-- ════════════════════════════
      ARMS — BANDS + BODYWEIGHT
 ════════════════════════════ -->
 <div class="session-panel" id="panel-arms">
@@ -3265,12 +3346,19 @@
   let seconds = 0;
   let running = false;
   let currentSession = 'am';
-  const totalSecs = { am: 3600, pm: 1800, bw: 1800, daily: 600, arms: 2700, gym: 5400 };
+  const totalSecs = { am: 3600, pm: 1800, bw: 1800, daily: 600, arms: 2700, gym: 5400, abs: 600 };
 
   // ── NAVIGATION ──
   function goToSession(session) {
     currentSession = session;
-    if (session !== 'daily') resetTimer();
+    // Point the shared interval engine at this circuit before resetting it,
+    // so it builds the right queue and durations.
+    if (isInterval(session)) {
+      intervalSession = session;
+      resetBlitz();
+    } else {
+      resetTimer();
+    }
 
     document.getElementById('homepage').style.display = 'none';
     document.getElementById('sticky-timer').style.display = 'flex';
@@ -3284,8 +3372,9 @@
     const isDaily = session === 'daily';
     const isArms  = session === 'arms';
     const isGym   = session === 'gym';
+    const isAbs   = session === 'abs';
 
-    ['am','pm','bw','daily','arms','gym'].forEach(s =>
+    ['am','pm','bw','daily','arms','gym','abs'].forEach(s =>
       document.getElementById('panel-' + s).classList.toggle('active', session === s)
     );
 
@@ -3296,8 +3385,9 @@
     if (isDaily) timer.classList.add('session-d');
     if (isArms)  timer.classList.add('session-e');
     if (isGym)   timer.classList.add('session-f');
+    if (isAbs)   timer.classList.add('session-g');
 
-    const tag = isAM ? 'AM' : isPM ? 'PM' : isBW ? 'BW' : isDaily ? '10' : isArms ? 'ARMS' : 'GYM';
+    const tag = isAM ? 'AM' : isPM ? 'PM' : isBW ? 'BW' : isDaily ? '10' : isArms ? 'ARMS' : isAbs ? 'ABS' : 'GYM';
     document.getElementById('timer-session-tag').textContent = tag;
 
     const header = document.getElementById('page-header');
@@ -3307,6 +3397,7 @@
     if (isDaily) header.classList.add('daily-header');
     if (isArms)  header.classList.add('arms-header');
     if (isGym)   header.classList.add('gym-header');
+    if (isAbs)   header.classList.add('abs-header');
 
     const labels = {
       am:    { label: '// MORNING SESSION //',      h1: 'PARK<br><span>DESTROYER</span>',  meta: '<span class="meta-pill">⏱ 60 MIN</span><span class="meta-pill">🔥 FULL BODY HYPERTROPHY</span><span class="meta-pill">🏋 BANDS + BODYWEIGHT</span><span class="meta-pill">NO MERCY</span>' },
@@ -3314,14 +3405,15 @@
       bw:    { label: '// BODYWEIGHT ONLY //',      h1: 'NO<br><span>EXCUSES</span>',       meta: '<span class="meta-pill">⚡ 30 MIN</span><span class="meta-pill">💀 MAX INTENSITY</span><span class="meta-pill">🏃 ZERO EQUIPMENT</span><span class="meta-pill">NOWHERE TO HIDE</span>' },
       daily: { label: '// DAILY NON-NEGOTIABLE //', h1: 'THE<br><span>BLITZ</span>',        meta: '<span class="meta-pill">🔥 10 MIN</span><span class="meta-pill">⚡ ZERO BREAKS</span><span class="meta-pill">💀 EVERY SINGLE DAY</span>' },
       arms:  { label: '// ARMS SPECIALIZATION //',  h1: 'ARM<br><span>DESTROYER</span>',   meta: '<span class="meta-pill">💪 45 MIN</span><span class="meta-pill">🎯 BICEPS + TRICEPS + FOREARMS</span><span class="meta-pill">🏋 BANDS + BODYWEIGHT</span>' },
-      gym:   { label: '// GYM SESSION //',          h1: 'GYM<br><span>DESTROYER</span>',   meta: '<span class="meta-pill">⏱ 90 MIN</span><span class="meta-pill">🔥 FULL BODY HYPERTROPHY</span><span class="meta-pill">🏋 DUMBBELLS + CABLES + BAR</span><span class="meta-pill">NO MERCY</span>' }
+      gym:   { label: '// GYM SESSION //',          h1: 'GYM<br><span>DESTROYER</span>',   meta: '<span class="meta-pill">⏱ 90 MIN</span><span class="meta-pill">🔥 FULL BODY HYPERTROPHY</span><span class="meta-pill">🏋 DUMBBELLS + CABLES + BAR</span><span class="meta-pill">NO MERCY</span>' },
+      abs:   { label: '// DAILY CORE CIRCUIT //',   h1: 'CORE<br><span>SHREDDER</span>',   meta: '<span class="meta-pill">🎯 10 MIN</span><span class="meta-pill">🔁 7 EXERCISES × 2 ROUNDS</span><span class="meta-pill">⚡ ZERO BREAKS</span><span class="meta-pill">EVERY DAY</span>' }
     };
 
     document.getElementById('header-label').textContent = labels[session].label;
     document.getElementById('header-h1').innerHTML = labels[session].h1;
     document.getElementById('header-meta').innerHTML = labels[session].meta;
 
-    const colors = { am: 'var(--red)', pm: 'var(--blue)', bw: 'var(--green)', daily: 'var(--fire)', arms: 'var(--purple)', gym: 'var(--teal)' };
+    const colors = { am: 'var(--red)', pm: 'var(--blue)', bw: 'var(--green)', daily: 'var(--fire)', arms: 'var(--purple)', gym: 'var(--teal)', abs: 'var(--pink)' };
     document.getElementById('start-btn').style.background = colors[session];
 
     // Fresh checklist every time a session is opened.
@@ -3338,7 +3430,7 @@
     // stop timers
     clearInterval(timerInterval);
     running = false;
-    if (currentSession === 'daily') {
+    if (isInterval(currentSession)) {
       clearInterval(blitzInterval);
       blitzRunning = false;
     }
@@ -3354,7 +3446,7 @@
     document.getElementById('complete-btn').classList.remove('ready');
 
     // hide all panels
-    ['am','pm','bw','daily','arms','gym'].forEach(s =>
+    ['am','pm','bw','daily','arms','gym','abs'].forEach(s =>
       document.getElementById('panel-' + s).classList.remove('active')
     );
 
@@ -3376,6 +3468,43 @@
     { name: '💀 DEATH ROUND',         note: 'Burpee → Push-up → Jump Squat → V-up. Cycle until time ends.',    duration: 45 },
   ];
 
+  // The 5-minute core circuit, run twice back to back.
+  const ABS_CIRCUIT = [
+    { name: 'Assisted Leg Raises',        note: 'Hands under your hips — lower slow, feet never touch the floor',      duration: 60 },
+    { name: 'Fast Drunken Mtn Climbers',  note: 'Knees drive across to the opposite elbow — as fast as form allows',   duration: 30 },
+    { name: 'Drunken Mtn Climbers',       note: 'Same cross-body drive, controlled pace — hips low, core braced',      duration: 60 },
+    { name: 'Scissor V-Ups',              note: 'Alternate leg to opposite hand — lower back stays pressed down',      duration: 60 },
+    { name: 'Starfish Crunches',          note: 'Arms and legs wide — crunch opposite hand to opposite foot',          duration: 30 },
+    { name: 'Circular Crunches — Left',   note: 'Circle the torso through the crunch, one direction, no pauses',       duration: 30 },
+    { name: 'Circular Crunches — Right',  note: 'Same circle, reversed — keep it smooth all the way through',          duration: 30 }
+  ];
+
+  const absExercises = [1, 2].reduce((all, round) => all.concat(
+    ABS_CIRCUIT.map((ex, i) => Object.assign({}, ex, { round: round, step: i + 1 }))
+  ), []);
+
+  // Both timed circuits share one engine; only the exercise list, the DOM id
+  // suffix and the counter wording differ.
+  const INTERVAL_SESSIONS = {
+    daily: {
+      exercises: blitzExercises,
+      suffix: '',
+      label: (i, ex, total) => 'EXERCISE ' + (i + 1) + ' OF ' + total
+    },
+    abs: {
+      exercises: absExercises,
+      suffix: '-abs',
+      label: (i, ex) => 'ROUND ' + ex.round + ' · EXERCISE ' + ex.step + ' OF ' + ABS_CIRCUIT.length
+    }
+  };
+
+  let intervalSession = 'daily';
+  const isInterval = s => Object.prototype.hasOwnProperty.call(INTERVAL_SESSIONS, s);
+  const ivCfg  = () => INTERVAL_SESSIONS[intervalSession];
+  const ivList = () => ivCfg().exercises;
+  const ivEl   = base => document.getElementById(base + ivCfg().suffix);
+  const ivQid  = i => 'qi' + ivCfg().suffix + '-' + i;
+
   let blitzRunning = false;
   let blitzInterval = null;
   let blitzCurrentEx = 0;
@@ -3383,77 +3512,81 @@
   let blitzTotalElapsed = 0;
 
   function buildQueue() {
-    const q = document.getElementById('exercise-queue');
+    const q = ivEl('exercise-queue');
     if (!q) return;
     q.innerHTML = '';
-    blitzExercises.forEach((ex, i) => {
+    ivList().forEach((ex, i) => {
       const item = document.createElement('div');
       item.className = 'queue-item' + (i === 0 ? ' active-ex' : '');
-      item.id = 'qi-' + i;
-      item.innerHTML = `<div class="queue-num">${String(i+1).padStart(2,'0')}</div><div class="queue-name">${ex.name}</div><div class="queue-duration">:${String(ex.duration).padStart(2,'0')}</div>`;
+      item.id = ivQid(i);
+      const num = ex.step ? 'R' + ex.round + '·' + ex.step : String(i + 1).padStart(2, '0');
+      item.innerHTML = `<div class="queue-num">${num}</div><div class="queue-name">${ex.name}</div><div class="queue-duration">:${String(ex.duration).padStart(2,'0')}</div>`;
       q.appendChild(item);
     });
   }
 
   function updateBlitzDisplay() {
-    const ex = blitzExercises[blitzCurrentEx];
-    document.getElementById('interval-num').textContent = `EXERCISE ${blitzCurrentEx + 1} OF ${blitzExercises.length}`;
-    document.getElementById('interval-ex-name').textContent = ex.name;
-    document.getElementById('interval-ex-note').textContent = ex.note;
-    document.getElementById('interval-countdown').textContent = blitzSecondsLeft;
-    document.getElementById('interval-countdown').className = 'interval-countdown' + (blitzSecondsLeft <= 5 ? ' danger' : '');
-    document.getElementById('interval-type-tag').textContent = blitzRunning ? '▶ GO' : '⏸ PAUSED';
-    const pct = (blitzSecondsLeft / ex.duration) * 100;
-    document.getElementById('interval-fill').style.width = pct + '%';
+    const list = ivList();
+    const ex = list[blitzCurrentEx];
+    if (!ex) return;
+    ivEl('interval-num').textContent = ivCfg().label(blitzCurrentEx, ex, list.length);
+    ivEl('interval-ex-name').textContent = ex.name;
+    ivEl('interval-ex-note').textContent = ex.note;
+    ivEl('interval-countdown').textContent = blitzSecondsLeft;
+    ivEl('interval-countdown').className = 'interval-countdown' + (blitzSecondsLeft <= 5 ? ' danger' : '');
+    ivEl('interval-type-tag').textContent = blitzRunning ? '▶ GO' : '⏸ PAUSED';
+    ivEl('interval-fill').style.width = ((blitzSecondsLeft / ex.duration) * 100) + '%';
 
-    // queue highlights
-    blitzExercises.forEach((_, i) => {
-      const el = document.getElementById('qi-' + i);
+    list.forEach((_, i) => {
+      const el = document.getElementById(ivQid(i));
       if (!el) return;
       el.className = 'queue-item' + (i === blitzCurrentEx ? ' active-ex' : i < blitzCurrentEx ? ' done-ex' : '');
     });
   }
 
   function toggleBlitz() {
-    if (blitzCurrentEx >= blitzExercises.length) { resetBlitz(); return; }
+    const list = ivList();
+    if (blitzCurrentEx >= list.length) { resetBlitz(); return; }
     if (blitzRunning) {
       clearInterval(blitzInterval);
       blitzRunning = false;
-      document.getElementById('blitz-start-btn').textContent = '▶ RESUME';
-      document.getElementById('interval-type-tag').textContent = '⏸ PAUSED';
+      ivEl('blitz-start-btn').textContent = '▶ RESUME';
+      ivEl('interval-type-tag').textContent = '⏸ PAUSED';
     } else {
       blitzRunning = true;
-      document.getElementById('blitz-start-btn').textContent = '⏸ PAUSE';
+      ivEl('blitz-start-btn').textContent = '⏸ PAUSE';
       blitzInterval = setInterval(() => {
         blitzSecondsLeft--;
         blitzTotalElapsed++;
-        // sync main timer display when on daily tab
-        if (currentSession === 'daily') {
+        if (isInterval(currentSession)) {
           seconds = blitzTotalElapsed;
           updateTimerDisplay();
           updateProgress();
         }
+        // A short buzz on the handover so you know to switch without looking.
+        if (blitzSecondsLeft === 0) buzz(35);
+
         if (blitzSecondsLeft <= 0) {
           blitzCurrentEx++;
-          if (blitzCurrentEx >= blitzExercises.length) {
+          if (blitzCurrentEx >= list.length) {
             clearInterval(blitzInterval);
             blitzRunning = false;
-            document.getElementById('interval-ex-name').textContent = '🏆 DONE. YOU SURVIVED.';
-            document.getElementById('interval-ex-note').textContent = 'Rest. You earned it.';
-            document.getElementById('interval-countdown').textContent = '00';
-            document.getElementById('interval-type-tag').textContent = '✔ SESSION COMPLETE';
-            document.getElementById('blitz-start-btn').textContent = '↺ AGAIN';
-            document.getElementById('interval-fill').style.width = '0%';
-            blitzExercises.forEach((_, i) => {
-              const el = document.getElementById('qi-' + i);
+            ivEl('interval-ex-name').textContent = '🏆 DONE. YOU SURVIVED.';
+            ivEl('interval-ex-note').textContent = 'Rest. You earned it.';
+            ivEl('interval-countdown').textContent = '00';
+            ivEl('interval-type-tag').textContent = '✔ SESSION COMPLETE';
+            ivEl('blitz-start-btn').textContent = '↺ AGAIN';
+            ivEl('interval-fill').style.width = '0%';
+            list.forEach((_, i) => {
+              const el = document.getElementById(ivQid(i));
               if (el) el.className = 'queue-item done-ex';
             });
             // Running the full circuit is the completion signal — bank it
             // automatically rather than making them tap DONE as well.
-            awardSession('daily', blitzTotalElapsed);
+            awardSession(intervalSession, blitzTotalElapsed);
             return;
           }
-          blitzSecondsLeft = blitzExercises[blitzCurrentEx].duration;
+          blitzSecondsLeft = list[blitzCurrentEx].duration;
         }
         updateBlitzDisplay();
       }, 1000);
@@ -3465,17 +3598,17 @@
     blitzRunning = false;
     blitzCurrentEx = 0;
     blitzTotalElapsed = 0;
-    blitzSecondsLeft = blitzExercises[0].duration;
-    document.getElementById('blitz-start-btn').textContent = '▶ START';
-    document.getElementById('interval-type-tag').textContent = '▶ PRESS START TO BEGIN';
-    if (currentSession === 'daily') { seconds = 0; updateTimerDisplay(); updateProgress(); }
+    blitzSecondsLeft = ivList()[0].duration;
+    ivEl('blitz-start-btn').textContent = '▶ START';
+    ivEl('interval-type-tag').textContent = '▶ PRESS START TO BEGIN';
+    if (isInterval(currentSession)) { seconds = 0; updateTimerDisplay(); updateProgress(); }
     buildQueue();
     updateBlitzDisplay();
   }
 
   // ── MAIN TIMER ──
   function toggleTimer() {
-    if (currentSession === 'daily') { toggleBlitz(); return; }
+    if (isInterval(currentSession)) { toggleBlitz(); return; }
     if (running) {
       clearInterval(timerInterval);
       running = false;
@@ -3492,7 +3625,7 @@
   }
 
   function resetTimer() {
-    if (currentSession === 'daily') { resetBlitz(); return; }
+    if (isInterval(currentSession)) { resetBlitz(); return; }
     clearInterval(timerInterval);
     running = false;
     seconds = 0;
@@ -3555,7 +3688,8 @@
     bw:    'No Excuses',
     daily: 'The Blitz',
     arms:  'Arm Destroyer',
-    gym:   'Gym Destroyer'
+    gym:   'Gym Destroyer',
+    abs:   'Core Shredder'
   };
 
   // ── Local-date helpers ──
@@ -3899,7 +4033,7 @@
 
   // XP is derived from the session facts already stored, so it recomputes
   // identically on any device and needs no extra columns.
-  const TYPE_XP = { am: 40, pm: 20, bw: 25, daily: 15, arms: 30, gym: 60 };
+  const TYPE_XP = { am: 40, pm: 20, bw: 25, daily: 15, arms: 30, gym: 60, abs: 20 };
 
   function sessionXP(log) {
     return Math.round((log.duration_seconds || 0) / 60) * 2 + (TYPE_XP[log.session_type] || 20);
@@ -3955,7 +4089,7 @@
     { id: 'ten',      icon: '🎖️', name: 'Ten Down',     desc: 'Complete 10 sessions',               test: c => c.logs.length >= 10 },
     { id: 'fifty',    icon: '🏅', name: 'Fifty Club',   desc: 'Complete 50 sessions',               test: c => c.logs.length >= 50 },
     { id: 'hundred',  icon: '🏆', name: 'Centurion',    desc: 'Complete 100 sessions',              test: c => c.logs.length >= 100 },
-    { id: 'all6',     icon: '🌐', name: 'All Rounder',  desc: 'Try all 6 workouts',                 test: c => c.types.size >= 6 },
+    { id: 'all6',     icon: '🌐', name: 'All Rounder',  desc: 'Try all 7 workouts',                 test: c => c.types.size >= 7 },
     { id: 'hour',     icon: '⏳', name: 'Iron Hour',    desc: 'One session of 60+ minutes',         test: c => c.longestSession >= 3600 },
     { id: 'early',    icon: '🌅', name: 'Early Bird',   desc: 'Finish a session before 7am',        test: c => c.early },
     { id: 'night',    icon: '🦉', name: 'Night Owl',    desc: 'Finish a session after 9pm',         test: c => c.night },
@@ -4224,7 +4358,7 @@
 
   // ── Completing a session ──
   function completeSession() {
-    const elapsed = currentSession === 'daily' ? blitzTotalElapsed : seconds;
+    const elapsed = isInterval(currentSession) ? blitzTotalElapsed : seconds;
 
     if (elapsed < 30) {
       showToast('NOT SO FAST ✋', 'Train at least 30 seconds first.');

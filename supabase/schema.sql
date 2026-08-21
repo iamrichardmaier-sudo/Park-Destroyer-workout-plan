@@ -12,7 +12,7 @@ create table if not exists public.workout_sessions (
   client_id        uuid not null,
 
   session_type     text not null
-                     check (session_type in ('am','pm','bw','daily','arms','gym')),
+                     check (session_type in ('am','pm','bw','daily','arms','gym','abs')),
   duration_seconds integer not null default 0 check (duration_seconds >= 0),
 
   -- The calendar day as it looked on the user's own clock. Streaks are a
