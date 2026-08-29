@@ -16,7 +16,31 @@ to `main`. GitHub Pages works too if you ever want a fallback
 links keep working. Edit `index.html` and copy it across, or drop the old file
 once nobody is using that link.
 
-## The widget
+## Widgets
+
+### iOS home screen (Scriptable)
+
+`park-destroyer.scriptable.js` renders the full Park Destroyer session as a
+**Large** Scriptable widget: 5 phases, 8 blocks, 22 exercises with sets and rep
+qualifiers, in two columns.
+
+1. Scriptable → **+** → paste the file in → name it *Park Destroyer*.
+2. Home screen → long press → **+** → Scriptable → **Large**.
+3. Long press the placed widget → *Edit Widget* → *Script* → pick it.
+
+iOS widgets can't scroll and clip silently when content overruns, so the script
+sizes itself: it looks up the large-widget box for the device, derives a fit
+factor against a reference layout, and scales every font and gap by it — with a
+safety margin, since real text metrics vary by font and iOS version. Type lands
+around 6.7pt on an iPhone SE and 13.6pt on a 12.9" iPad, always fitting.
+
+Knobs at the top of the file: `SHOW_NOTES` (form cues, off by default — they
+roughly double the line count), `TUNE` (overall density), `COL_WIDTH` (override
+if the device lookup guesses wrong).
+
+### Embeddable web page
+
+## The web widget
 
 `widget.html` is a standalone, read-only view of the full **Park Destroyer**
 (red / AM) session — all 5 phases, 8 blocks and 22 exercises with sets, reps
