@@ -1,8 +1,8 @@
 # Park-Destroyer-workout-plan
 
-A single-page workout app with a training dashboard, streak calendar, and six
+A single-page workout app with a training dashboard, streak calendar, and seven
 sessions (Park Destroyer, Recovery Pump, No Excuses, Arm Destroyer, The Blitz,
-Gym Destroyer).
+Core Shredder, Gym Destroyer).
 
 ## The shareable link
 
@@ -40,8 +40,6 @@ if the device lookup guesses wrong).
 
 ### Embeddable web page
 
-## The web widget
-
 `widget.html` is a standalone, read-only view of the full **Park Destroyer**
 (red / AM) session — all 5 phases, 8 blocks and 22 exercises with sets, reps
 and form cues on a single screen. It's for embedding somewhere you want the
@@ -71,7 +69,7 @@ up → unlock trophies → protect your streak.
 
 **XP and levels.** Every banked session pays out `minutes × 2` plus a bonus for
 how hard the session is (Gym 60, Park Destroyer 40, Arms 30, No Excuses 25,
-Recovery 20, Blitz 15). Each level costs 28% more than the last, and rank
+Recovery 20, Core Shredder 20, Blitz 15). Each level costs 28% more than the last, and rank
 titles climb Rookie → Grinder → Warrior → Beast → Savage → Destroyer → Legend →
 Immortal.
 
@@ -80,7 +78,7 @@ number, so it recomputes identically on any device and can never drift out of
 sync with your actual history.
 
 **Trophies.** 14 unlockables covering firsts, streaks, volume, variety and
-timing. Locked ones still show their name so you know what to chase — tap any
+timing (All Rounder now wants all seven sessions). Locked ones still show their name so you know what to chase — tap any
 trophy to see how it's earned. Each one celebrates exactly once: the app
 remembers which have been shown, so history syncing in from another device
 backfills quietly instead of replaying twenty popups.
@@ -101,7 +99,8 @@ Finishing a session banks it:
 
 - Any timed session — hit **✔ DONE** in the timer bar (needs at least 30s on the
   clock, so a stray tap doesn't log a workout).
-- **The Blitz** — logs itself automatically when the circuit runs to the end.
+- **The Blitz** and **Core Shredder** — log themselves automatically when the
+  circuit runs to the end.
 
 The homepage dashboard then shows the current and best day streak, total
 sessions, total time trained, and a month calendar where each day is shaded by
@@ -161,4 +160,4 @@ successful connection, so nothing is lost either way.
 | `client_id` | generated on the device; unique per user so a retried upload can't duplicate a session |
 | `local_date` | the day as it looked on the user's clock, since streaks are a local-timezone idea |
 | `duration_seconds` | drives the "trained" total |
-| `session_type` | one of `am`, `pm`, `bw`, `daily`, `arms`, `gym` |
+| `session_type` | one of `am`, `pm`, `bw`, `daily`, `arms`, `gym`, `abs` |
