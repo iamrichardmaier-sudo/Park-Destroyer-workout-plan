@@ -16,6 +16,30 @@ to `main`. GitHub Pages works too if you ever want a fallback
 links keep working. Edit `index.html` and copy it across, or drop the old file
 once nobody is using that link.
 
+## The widget
+
+`widget.html` is a standalone, read-only view of the full **Park Destroyer**
+(red / AM) session — all 5 phases, 8 blocks and 22 exercises with sets, reps
+and form cues on a single screen. It's for embedding somewhere you want the
+whole workout visible at a glance, and is served alongside the app:
+
+```
+https://<your-site>/widget.html
+```
+
+It has no dependencies and no app state — nothing to configure, nothing to
+sign into. Because an embed can be given more or less any dimensions, it
+doesn't guess breakpoints: it binary-searches the largest scale whose laid-out
+height still clears the viewport, deriving column count (1–4) from the width
+each candidate scale implies. Text reflows before it shrinks, and the whole
+session stays on screen at any size.
+
+The `NOTES` button in the corner hides the form cues, which are the bulk of the
+text — worth it on a small embed. The choice is remembered per browser.
+
+The content is generated from the app's own markup rather than retyped, so the
+two can't drift apart in wording. Re-generate it if you edit the AM session.
+
 ## The game
 
 The app is built around a completion loop: finish a session → earn XP → level
