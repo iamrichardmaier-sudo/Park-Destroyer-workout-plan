@@ -34,9 +34,13 @@ factor against a reference layout, and scales every font and gap by it — with 
 safety margin, since real text metrics vary by font and iOS version. Type lands
 around 6.7pt on an iPhone SE and 13.6pt on a 12.9" iPad, always fitting.
 
-Knobs at the top of the file: `SHOW_NOTES` (form cues, off by default — they
-roughly double the line count), `TUNE` (overall density), `COL_WIDTH` (override
-if the device lookup guesses wrong).
+Tapping the widget opens the live app. Set `SITE_URL` at the top of the file to
+your deployed URL — until you do, the widget deliberately stays inert rather
+than launching a dead page.
+
+Other knobs at the top: `SHOW_NOTES` (form cues, off by default — they roughly
+double the line count), `TUNE` (overall density), `COL_WIDTH` (override if the
+device lookup guesses wrong).
 
 ### Embeddable web page
 

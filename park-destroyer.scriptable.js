@@ -11,6 +11,11 @@
 // ═══════════════════════════════════════════════════════════
 
 // ── Tweakables ────────────────────────────────────────────
+// ►► PASTE YOUR LIVE SITE URL HERE ◄◄
+// Tapping the widget opens this. Until it's filled in, the widget stays
+// tappable-but-inert rather than launching a broken page.
+const SITE_URL = "https://YOUR-SITE.netlify.app";
+
 // Form cues roughly double the line count. Off by default so the
 // exercise names stay legible; flip to true if you want them.
 const SHOW_NOTES = false;
@@ -199,6 +204,10 @@ function renderPhase(col, p, w) {
 const w = new ListWidget();
 w.backgroundColor = C.bg;
 w.setPadding(PAD, PAD, PAD, PAD);
+
+// Whole-widget tap target → the live app. Skipped while SITE_URL is still the
+// placeholder, so an unedited script doesn't open a dead page.
+if (SITE_URL && !/YOUR-SITE/.test(SITE_URL)) w.url = SITE_URL;
 
 const head = w.addStack();
 head.layoutHorizontally();
