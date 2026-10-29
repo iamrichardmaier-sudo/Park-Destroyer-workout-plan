@@ -66,6 +66,65 @@ text — worth it on a small embed. The choice is remembered per browser.
 The content is generated from the app's own markup rather than retyped, so the
 two can't drift apart in wording. Re-generate it if you edit the AM session.
 
+## Apple Health
+
+Finished sessions can be written into Apple Health as workouts.
+
+**Why it works this way.** A web page cannot write to HealthKit — there is no
+HealthKit API for the web — and Scriptable has no Health API either. The only
+supported route on iOS is the **Shortcuts** app, which can write workouts. So
+the app hands a session to a Shortcut and the Shortcut does the write.
+
+### 1. Build the Shortcut
+
+In Shortcuts, create one named exactly **Log Park Destroyer** (or rename it and
+update `HEALTH_SHORTCUT` in the config block at the bottom of `index.html`).
+
+1. Turn on **Shortcut Details → Show in Share Sheet / Accept input**, with
+   input type **Text**.
+2. **Get Dictionary from Input** — parses the JSON the app sends.
+3. **Get Dictionary Value**, key `workouts` → gives a list.
+4. **Repeat with Each** over that list, and inside the loop:
+   - **Get Dictionary Value** `activity`, `start`, `end` from *Repeat Item*
+   - The Health action that logs a finished workout — depending on your iOS
+     version it is listed as **Log Workout** or appears under *Health →
+     Logging*. Set its activity type, start and end from those values.
+5. Grant Health write access the first time it runs.
+
+> Check the action's exact name in your Shortcuts app — Apple has moved and
+> renamed the Health actions between iOS releases, so it may not match the
+> wording above.
+
+### 2. Send sessions
+
+- **On finishing a workout** — the completion card has a *Send to Apple Health*
+  button under the main one.
+- **Later / in bulk** — the Stats tab shows how many sessions are waiting, with
+  a *Send* button that passes all of them in one go.
+
+Sessions are flagged once handed over, so nothing is logged twice. The flag is
+set at hand-off rather than on confirmation, because Shortcuts does not return
+to the page — if a run fails, clear it by editing `pd_logs_v1` in local storage.
+
+### What is sent
+
+```json
+{ "source": "Park Destroyer",
+  "workouts": [{ "id": "…", "activity": "Core Training", "name": "Core Shredder",
+                 "start": "…Z", "end": "…Z", "minutes": 10, "seconds": 600 }] }
+```
+
+| Session | HealthKit activity |
+|---|---|
+| Park Destroyer, Recovery Pump | Functional Strength Training |
+| No Excuses, The Blitz | High Intensity Interval Training |
+| Arm Destroyer, Gym Destroyer | Traditional Strength Training |
+| Core Shredder | Core Training |
+
+**No calorie figure is sent.** Without heart rate or body weight any number
+would be invented, and this is a health record. Let Health estimate it, or add
+your own calculation inside the Shortcut.
+
 ## The game
 
 The app is built around a completion loop: finish a session → earn XP → level

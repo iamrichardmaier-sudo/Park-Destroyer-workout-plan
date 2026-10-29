@@ -601,6 +601,66 @@
 
   .modal-btn:active { transform: scale(0.97); }
 
+  /* Secondary action under the primary one (e.g. send to Health). */
+  .modal-btn.alt {
+    background: none;
+    border: 1px solid #333;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 10px 16px;
+    margin-top: 8px;
+  }
+
+  .modal-btn.alt.done { color: var(--green); border-color: var(--green-dark); }
+
+  /* ── HEALTH SYNC ── */
+  .health-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--mid);
+    border-radius: 10px;
+    padding: 11px 13px;
+    margin-bottom: 10px;
+    border-left: 4px solid #FF2D55;   /* Apple Health pink */
+  }
+
+  .health-row.clear { border-left-color: var(--green); }
+
+  .health-icon { font-size: 19px; line-height: 1; flex-shrink: 0; }
+
+  .health-title {
+    font-family: 'Black Ops One', cursive;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .health-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .health-btn {
+    margin-left: auto;
+    flex-shrink: 0;
+    background: #FF2D55;
+    color: #fff;
+    border: none;
+    font-family: 'Black Ops One', cursive;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    padding: 7px 11px;
+    border-radius: 6px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .health-btn:active { transform: scale(0.96); }
+  .health-btn[disabled] { opacity: 0.35; }
+
   /* Floating "+XP" that rises off a ticked block. */
   .xp-pop {
     position: fixed;
@@ -1848,6 +1908,15 @@
       <div class="xp-next" id="lv-next">200 XP to Level 2</div>
     </div>
 
+    <div class="health-row" id="health-row">
+      <div class="health-icon" id="health-icon">❤️</div>
+      <div>
+        <div class="health-title">APPLE HEALTH</div>
+        <div class="health-sub" id="health-sub">Nothing waiting</div>
+      </div>
+      <button class="health-btn" id="health-btn" onclick="sendPendingToHealth()">SEND</button>
+    </div>
+
     <div class="quest" id="quest">
       <div class="quest-icon" id="quest-icon">🎯</div>
       <div>
@@ -1955,6 +2024,7 @@
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-stats" id="modal-stats"></div>
     <button class="modal-btn" id="modal-btn" onclick="modalNext()">LET'S GO</button>
+    <button class="modal-btn alt" id="modal-alt" style="display:none" onclick="modalAlt()"></button>
   </div>
 </div>
 
@@ -3336,7 +3406,13 @@
 <script>
   window.PD_CONFIG = {
     SUPABASE_URL: '',
-    SUPABASE_ANON_KEY: ''
+    SUPABASE_ANON_KEY: '',
+
+    // ── Apple Health ──
+    // A web page cannot write to Apple Health — there is no HealthKit API for
+    // the web — so completed sessions are handed to an iOS Shortcut, which
+    // can. This must match the Shortcut's name exactly (see the README).
+    HEALTH_SHORTCUT: 'Log Park Destroyer'
   };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -3932,6 +4008,7 @@
 
     renderCalendar();
     renderGame();
+    renderHealth();
   }
 
   // ── Calendar ──
@@ -4329,6 +4406,93 @@
     })();
   }
 
+  /* ═══════════════════════════════════════════════════════
+     APPLE HEALTH BRIDGE
+
+     Neither a web page nor Scriptable can write to HealthKit, so the only
+     supported route on iOS is to hand a session to the Shortcuts app, which
+     can. We open shortcuts://run-shortcut with the session as JSON input and
+     the Shortcut does the actual Health write.
+
+     Sessions are flagged once handed over, so nothing gets logged twice and
+     anything missed can be sent later from the Stats tab.
+  ═══════════════════════════════════════════════════════ */
+
+  // HealthKit workout activity types, spelled as the Shortcuts action lists
+  // them. Mapped by what each session actually is, not by name.
+  const HEALTH_ACTIVITY = {
+    am:    'Functional Strength Training',
+    pm:    'Functional Strength Training',
+    bw:    'High Intensity Interval Training',
+    daily: 'High Intensity Interval Training',
+    arms:  'Traditional Strength Training',
+    gym:   'Traditional Strength Training',
+    abs:   'Core Training'
+  };
+
+  function healthItem(l) {
+    const end = new Date(l.completed_at);
+    const start = new Date(end.getTime() - (l.duration_seconds || 0) * 1000);
+    return {
+      id:       l.client_id,
+      activity: HEALTH_ACTIVITY[l.session_type] || 'Functional Strength Training',
+      name:     SESSION_LABELS[l.session_type] || l.session_type,
+      start:    start.toISOString(),
+      end:      end.toISOString(),
+      minutes:  Math.max(1, Math.round((l.duration_seconds || 0) / 60)),
+      seconds:  l.duration_seconds || 0
+      // Deliberately no calorie figure: without heart rate or body weight any
+      // number here would be invented, and this is going into a health record.
+      // Let Health estimate it, or add it in the Shortcut if you want one.
+    };
+  }
+
+  function pendingHealth() {
+    return Store.logs.filter(l => !l.health);
+  }
+
+  function markHealthSent(items) {
+    const ids = new Set(items.map(i => i.id));
+    Store.logs.forEach(l => { if (ids.has(l.client_id)) l.health = true; });
+    Store.saveLocal();
+    renderHealth();
+  }
+
+  function sendToHealth(logs) {
+    if (!logs.length) return false;
+    const name = (window.PD_CONFIG || {}).HEALTH_SHORTCUT;
+    if (!name) { showToast('NOT CONFIGURED', 'Set HEALTH_SHORTCUT in the config block.'); return false; }
+
+    const items = logs.map(healthItem);
+    const payload = JSON.stringify({ source: 'Park Destroyer', workouts: items });
+
+    const url = 'shortcuts://run-shortcut?name=' + encodeURIComponent(name) +
+                '&input=text&text=' + encodeURIComponent(payload);
+
+    // Shortcuts never returns to the page, so treat the handover as the
+    // success signal and flag them now; anything that fails can be re-sent.
+    markHealthSent(items);
+    window.location.href = url;
+    return true;
+  }
+
+  function sendPendingToHealth() {
+    const pending = pendingHealth();
+    if (!pending.length) { showToast('ALL CAUGHT UP ❤️', 'Nothing waiting for Health.'); return; }
+    sendToHealth(pending);
+  }
+
+  function renderHealth() {
+    const row = document.getElementById('health-row');
+    if (!row) return;
+    const n = pendingHealth().length;
+    document.getElementById('health-sub').textContent =
+      n ? n + ' workout' + (n === 1 ? '' : 's') + ' waiting' : 'All sessions sent';
+    document.getElementById('health-icon').textContent = n ? '❤️' : '✅';
+    document.getElementById('health-btn').disabled = !n;
+    row.className = 'health-row' + (n ? '' : ' clear');
+  }
+
   // ── Modal queue ──
   let modalQueue = [];
 
@@ -4348,7 +4512,22 @@
       .map(s => '<div class="modal-stat"><div class="ms-val">' + s.v +
                 '</div><div class="ms-lab">' + s.l + '</div></div>').join('');
     document.getElementById('modal-btn').textContent = m.btn || 'LET\'S GO';
+
+    const alt = document.getElementById('modal-alt');
+    if (m.alt) {
+      alt.style.display = 'block';
+      alt.textContent = m.alt.label;
+      alt.className = 'modal-btn alt';
+    } else {
+      alt.style.display = 'none';
+    }
     document.getElementById('modal').classList.add('show');
+  }
+
+  // The secondary action stays on the current card so its result is visible.
+  function modalAlt() {
+    const m = modalQueue[0];
+    if (m && m.alt && m.alt.run) m.alt.run();
   }
 
   function modalNext() {
@@ -4392,7 +4571,14 @@
         { v: mins + 'm',   l: 'Time' },
         { v: streak,       l: 'Streak' }
       ],
-      btn: 'NICE'
+      btn: 'NICE',
+      alt: {
+        label: '❤️ SEND TO APPLE HEALTH',
+        run: () => {
+          const entry = Store.logs[Store.logs.length - 1];
+          if (entry) sendToHealth([entry]);
+        }
+      }
     });
 
     if (after.level > beforeLevel) {
